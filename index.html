@@ -3,18 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; img-src 'self' https:; style-src 'unsafe-inline'; connect-src 'self' https://api.github.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' https:; style-src 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://api.github.com">
   <title>Gallery</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-black text-white">
+<body class="bg-black text-gray-400">
 
 <div id="fullscreen" class="flex items-center justify-center h-screen relative">
-  <div id="title" class="absolute top-5 left-5 md:left-12 text-2xl"></div>
+  <div id="title" class="absolute bottom-5 left-5 md:left-12 text-2xl"></div>
   <img id="image" class="max-w-[90%] max-h-[90%] object-contain" src="" alt="">
-  <div id="prev" class="absolute left-5 md:left-12 text-4xl cursor-pointer hover:opacity-70">&lt;</div>
-  <div id="next" class="absolute right-5 md:right-12 text-4xl cursor-pointer hover:opacity-70">&gt;</div>
-  <button id="gridBtn" class="absolute top-5 right-5 md:right-12 px-4 py-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 text-sm">Grid</button>
+  <button id="gridBtn" class="absolute top-5 right-5 md:right-12 px-4 py-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 text-sm z-10">Grid</button>
+  <div id="prev" class="absolute left-5 md:left-12 text-6xl cursor-pointer hover:opacity-70 scale-150">⟨</div>
+  <div id="next" class="absolute right-5 md:right-12 text-6xl cursor-pointer hover:opacity-70 scale-150">⟩</div>
+
+    <!-- Clickable left half for previous -->
+  <div id="prev-area" class="absolute top-0 left-0 h-full w-1/2 cursor-pointer z-0"></div>
+  
+  <!-- Clickable right half for next -->
+  <div id="next-area" class="absolute top-0 right-0 h-full w-1/2 cursor-pointer z-0"></div>
+  
 </div>
 
 <div id="grid" class="hidden bg-black min-h-screen p-5 md:p-12">
@@ -65,8 +72,9 @@
     render();
   }
 
-  document.getElementById('prev').addEventListener('click', () => { if (current > 0) { current--; render(); } });
-  document.getElementById('next').addEventListener('click', () => { if (current < images.length - 1) { current++; render(); } });
+
+  document.getElementById('prev-area').addEventListener('click', () => { if (current > 0) { current--; render(); } });
+  document.getElementById('next-area').addEventListener('click', () => { if (current < images.length - 1) { current++; render(); } });
   
   document.getElementById('gridBtn').addEventListener('click', function() {
     const fs = document.getElementById('fullscreen');
