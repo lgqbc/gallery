@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+    
+    #fullscreen { display: flex; align-items: center; justify-content: center; height: 100vh; }
+    #image { max-width: 90%; max-height: 90%; object-fit: contain; }
+    #title { position: absolute; top: 20px; left: 5%; font-size: 24px; }
+    
+    .nav { position: absolute; font-size: 40px; cursor: pointer; user-select: none; }
+    #prev { left: 20px; }
+    #next { right: 20px; }
+    .nav:hover { opacity: 0.7; }
+    .nav.hidden { display: none; }
+    
+    #gridBtn { position: absolute; top: 20px; right: 5%; padding: 10px 16px; background: #222; border: 1px solid #444; color: #fff; cursor: pointer; font-size: 14px; }
+    #gridBtn:hover { background: #333; }
+    
+    #grid { display: none; padding: 40px 20px; }
+    
+    .grid-container { display: grid; gap: 20px; }
+    @media (min-width: 768px) { .grid-container { grid-template-columns: repeat(3, 1fr); padding: 0 60px; } }
+    @media (max-width: 767px) { .grid-container { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .grid-container { grid-template-columns: 1fr; } }
+    
+    .grid-item { cursor: pointer; overflow: hidden; aspect-ratio: 1; }
+    .grid-item img { width: 100%; height: 100%; object-fit: cover; }
+  </style>
+</head>
+<body>
+
+<div id="fullscreen">
+  <div id="title"></div>
+  <img id="image" src="" alt="">
+  <div id="prev" class="nav">&lt;</div>
+  <div id="next" class="nav">&gt;</div>
+  <button id="gridBtn">Grid</button>
+</div>
+
+<div id="grid"></div>
+
+<script>
+  let images = [];
+  let current = 0;
+
+  async function loadImages() {
+    try {
+      const response = await fetch('https://api.github.com/repos/' + getRepoPath() + '/contents/images');
+      const data = await response.json();
+      images = data.filter(f => /\.(jpg|jpeg|png|gif|webp)$/i.test(f.name)).map(f => ({
+        name: f.name.replace(/\.[^/.]+$/, ''),
+        url: f.download_url
+      }));
+      render();
+    } catch (e) {
+      document.getElementById('title').textContent = 'Error loading images';
+    }
+  }
+
+  function getRepoPath() {
+    // Replace with your username/repo
+    return 'username/repo-name';
+  }
+
+  function render() {
+    const fs = document.getElementById('fullscreen');
+    const g = document.getElementById('grid');
+    
+    if (fs.style.display !== 'none') {
+      document.getElementById('image').src = images[current].url;
+      document.getElementById('title').textContent = images[current].name;
+      document.getElementById('prev').classList.toggle('hidden', current === 0);
+      document.getElementById('next').classList.toggle('hidden', current === images.length - 1);
+    } else {
+      g.innerHTML = images.map((img, i) => 
+        `<div class="grid-item" onclick="setCurrent(${i})"><img src="${img.url}" alt="${img.name}"></div>`
+      ).join('');
+    }
+  }
+
+  function setCurrent(i) {
+    current = i;
+    document.getElementById('fullscreen').style.display = 'flex';
+    document.getElementById('grid').style.display = 'none';
+    document.getElementById('gridBtn').textContent = 'Grid';
+    render();
+  }
+
+  document.getElementById('prev').addEventListener('click', () => { if (current > 0) { current--; render(); } });
+  document.getElementById('next').addEventListener('click', () => { if (current < images.length - 1) { current++; render(); } });
+  
+  document.getElementById('gridBtn').addEventListener('click', function() {
+    const fs = document.getElementById('fullscreen');
+    const g = document.getElementById('grid');
+    if (fs.style.display === 'none') {
+      fs.style.display = 'flex';
+      g.style.display = 'none';
+      this.textContent = 'Grid';
+    } else {
+      fs.style.display = 'none';
+      g.style.display = 'block';
+      this.textContent = 'View';
+      render();
+    }
+  });
+
+  loadImages();
+</script>
+
+</body>
+</html>
