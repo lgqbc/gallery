@@ -10,11 +10,13 @@
 <body class="bg-black text-gray-400">
 
 <div id="fullscreen" class="flex items-center justify-center h-screen relative">
-  <div id="title" class="absolute bottom-5 left-5 md:left-12 text-2xl"></div>
+  <div id="title" class="hidden absolute bottom-5 left-5 md:left-12 text-2xl"></div>
   <img id="image" class="max-w-[90%] max-h-[90%] object-contain" src="" alt="">
-  <button id="gridBtn" class="absolute top-5 right-5 md:right-12 px-4 py-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 text-sm z-10">Grid</button>
-  <div id="prev" class="absolute left-5 md:left-12 text-6xl cursor-pointer hover:opacity-70 scale-150">⟨</div>
-  <div id="next" class="absolute right-5 md:right-12 text-6xl cursor-pointer hover:opacity-70 scale-150">⟩</div>
+  <button id="gridBtn" class="absolute top-5 right-5 md:right-12 px-4 py-2 bg-gray-900 border border-gray-700 hover:bg-gray-800 text-sm z-10">☰</button>
+  <div id="dotsBar" class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2 z-10"></div>
+  
+  <div id="prev" class="text-white opacity-50 absolute left-5 md:left-12 text-6xl cursor-pointer scale-150">⟨</div>
+  <div id="next" class="text-white opacity-50 absolute right-5 md:right-12 text-6xl cursor-pointer scale-150">⟩</div>
 
     <!-- Clickable left half for previous -->
   <div id="prev-area" class="absolute top-0 left-0 h-full w-1/2 cursor-pointer z-0"></div>
@@ -50,6 +52,23 @@
   function render() {
     const fs = document.getElementById('fullscreen');
     const g = document.getElementById('grid');
+
+      if (fs.classList.contains('flex')) {
+        const image = images[current];
+        document.getElementById('image').src = image.url;
+      
+        const name = image.name;
+        document.getElementById('title').textContent = name.startsWith("DSC") ? "" : name;
+      
+        document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
+        document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
+      
+        // --- DOTS BAR ---
+        document.getElementById('dotsBar').innerHTML = images.map((_, i) =>
+          `<div class="w-2 h-2 opacity-50 rounded-full ${i === current ? 'bg-white' : 'bg-gray-500'} cursor-pointer"
+               onclick="setCurrent(${i})"></div>`
+        ).join('');
+      }
     
     if (fs.classList.contains('flex')) {
       document.getElementById('image').src = images[current].url;
@@ -68,7 +87,7 @@
     document.getElementById('fullscreen').classList.remove('hidden');
     document.getElementById('fullscreen').classList.add('flex');
     document.getElementById('grid').classList.add('hidden');
-    document.getElementById('gridBtn').textContent = 'Grid';
+    document.getElementById('gridBtn').textContent = '☰';
     render();
   }
 
