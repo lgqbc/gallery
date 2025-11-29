@@ -50,6 +50,7 @@
   let current = 0;
 
   async function loadImages() {
+  await new Promise(r => setTimeout(r, 500));
     try {
       const response = await fetch('https://api.github.com/repos/' + getRepoPath() + '/contents/images');
       const data = await response.json();
