@@ -39,7 +39,7 @@
 </div>
 
   
-<div id="grid" class="hidden bg-coal min-h-screen p-5 md:p-12">
+<div id="grid" class="hidden bg-coal min-h-screen px-5 md:px-12 2xl:px-24 py-5 md:py-12">
    <button id="closeGrid" class="text-4xl sm:text-6xl absolute top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full opacity-50 hover:opacity-70 z-10 scale-150">×</button>
   <div id="gridContainer" class="grid gap-2 md:gap-5 lg:gap-10 grid-cols-2 lg:grid-cols-3"></div>
 </div>
@@ -114,45 +114,43 @@ if (current > 0) preloadImage(images[current - 1].url);
     }
   }
 
-  function render() {
-    const fs = document.getElementById('fullscreen');
-    const g = document.getElementById('grid');
+function render() {
+  const fs = document.getElementById('fullscreen');
+  const g = document.getElementById('grid');
+  const imgEl = document.getElementById('image');
 
-      if (fs.classList.contains('flex')) {
-        const image = images[current];
-        document.getElementById('image').src = image.url;
-      
-        const name = image.name;
-        document.getElementById('title').textContent = name.startsWith("DSC") ? "" : name;
-      
-        document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
-        document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
-      
-// --- DOTS BAR ---
-        document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
-          const isActive = i === current;
-          return `
-            <div class="relative cursor-pointer ${isActive ? '' : 'group'}" onclick="setCurrent(${i})">
-              <div class="absolute inset-[-7px]"></div>
-              <div class="w-2 h-2 bg-slate-300 rounded-full ${isActive ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-            </div>
-          `;
-        }).join('');
+  // Switch the image immediately
+  imgEl.src = images[current].url;
 
-      }
+  if (fs.classList.contains('flex')) {
+    const image = images[current];
 
-// image
-    if (fs.classList.contains('flex')) {
-      document.getElementById('image').src = images[current].url;
-      document.getElementById('title').textContent = images[current].name;
-      document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
-      document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
-    } else {
-      document.getElementById('gridContainer').innerHTML = images.map((img, i) => 
-        `<div class="cursor-pointer overflow-hidden aspect-square" onclick="setCurrent(${i})"><img src="${img.url}" alt="${img.name}" class="w-full h-full object-cover"></div>`
-      ).join('');
-    }
+    // Update title
+    document.getElementById('title').textContent = image.name.startsWith("DSC") ? "" : image.name;
+
+    // Show/hide arrows
+    document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
+    document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
+
+    // Update dots
+    document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
+      const isActive = i === current;
+      return `
+        <div class="relative cursor-pointer ${isActive ? '' : 'group'}" onclick="setCurrent(${i})">
+          <div class="absolute inset-[-7px]"></div>
+          <div class="w-2 h-2 bg-slate-300 rounded-full ${isActive ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
+        </div>
+      `;
+    }).join('');
+  } else {
+    // Grid view
+    document.getElementById('gridContainer').innerHTML = images.map((img, i) => 
+      `<div class="cursor-pointer overflow-hidden aspect-square" onclick="setCurrent(${i})">
+         <img src="${img.url}" alt="${img.name}" class="w-full h-full object-cover">
+       </div>`
+    ).join('');
   }
+}
 
   function setCurrent(i) {
     current = i;
