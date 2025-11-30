@@ -21,7 +21,7 @@
 
 <div id="fullscreen" class="flex items-center justify-center h-screen relative">
   <div id="title" class="hidden absolute bottom-5 left-5 md:left-12 text-2xl"></div>
-  <img id="image" class="rounded-lg 
+  <img id="image" class="rounded-md
     max-w-[100%] 2xl:max-w-[93%] max-h-[100%] 2xl:max-h-[93%] 
     object-contain" src="" alt="">
   <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
@@ -145,7 +145,7 @@ function render() {
   } else {
     // Grid view
     document.getElementById('gridContainer').innerHTML = images.map((img, i) => 
-      `<div class="cursor-pointer overflow-hidden aspect-square" onclick="setCurrent(${i})">
+      `<div class="cursor-pointer overflow-hidden aspect-square rounded-lg" onclick="setCurrent(${i})">
          <img src="${img.url}" alt="${img.name}" class="w-full h-full object-cover">
        </div>`
     ).join('');
