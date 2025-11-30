@@ -86,6 +86,16 @@
   let images = [];
   let current = 0;
 
+// pre-load images
+  function preloadImage(url) {
+  const img = new Image();
+  img.src = url;
+}
+
+// Inside render(), after updating current image:
+if (current < images.length - 1) preloadImage(images[current + 1].url);
+if (current > 0) preloadImage(images[current - 1].url);
+
   async function loadImages() {
     await new Promise(r => setTimeout(r, 500));
     try {
