@@ -7,7 +7,7 @@
   <title>Gallery</title>
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- custom colors -->
+<!-- custom colors -->
   <script>tailwind.config={theme:{extend:{colors:{coal:"#111111"}}}};</script>
 
   <style>
@@ -62,23 +62,23 @@
   
 <script>
 
-    // Show welcome popup only if user has NOT closed it before
+// Show welcome popup only if user has NOT closed it before
     const popup = document.getElementById("welcomePopup");
     const closeBtn = document.getElementById("closePopup");
     const openBtn = document.getElementById("openPopup");
   
-    // Show popup on first visit (unless closed before)
+// Show popup on first visit (unless closed before)
     if (!localStorage.getItem("closedPopup")) {
       popup.classList.remove("hidden");
     }
   
-    // Close
+// Close
     closeBtn.onclick = () => {
       popup.classList.add("hidden");
       localStorage.setItem("closedPopup", "true");
     };
   
-    // Re-open manually whenever the user wants
+// Re-open manually whenever the user wants
     openBtn.onclick = () => {
       popup.classList.remove("hidden");
     };
@@ -115,7 +115,7 @@
         document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
         document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
       
-        // --- DOTS BAR ---
+// --- DOTS BAR ---
         document.getElementById('dotsBar').innerHTML = images.map((_, i) =>
           `<div class="relative cursor-pointer" onclick="setCurrent(${i})">
              <div class="absolute inset-[-4px]"></div> <!-- invisible larger click area -->
@@ -146,14 +146,14 @@
   }
 
   document.getElementById("closeGrid").onclick = () => {
-  // hide grid
+// hide grid
   document.getElementById("grid").classList.add("hidden");
 
-  // show fullscreen
+// show fullscreen
   document.getElementById("fullscreen").classList.remove("hidden");
   document.getElementById("fullscreen").classList.add("flex");
 
-  // make sure the image updates correctly
+// make sure the image updates correctly
   render();
   };
 
