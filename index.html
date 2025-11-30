@@ -14,17 +14,19 @@
   <img id="image" class="
     max-w-[100%] 2xl:max-w-[93%] max-h-[100%] 2xl:max-h-[93%] 
     object-contain" src="" alt="">
-  <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white text-6xl opacity-75 z-10">⋮⋮⋮</button>
+  <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
   <div id="dotsBar" class="absolute bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2 z-10"></div>
+
+  <button id="openPopup" class="absolute top-24 right-3 2xl:right-64 px-3 py-2 hover:text-white text-6xl opacity-50 z-10">⌤</button>
   
   <div id="prev" class="text-white opacity-25 absolute left-3 2xl:left-64 text-6xl cursor-pointer scale-150">⟨</div>
   <div id="next" class="text-white opacity-25 absolute right-3 2xl:right-64 text-6xl cursor-pointer scale-150">⟩</div>
 
     <!-- Clickable left half for previous -->
-  <div id="prev-area" class="absolute top-0 left-0 h-full w-1/2 cursor-pointer z-0"></div>
+  <div id="prev-area" class="absolute top-0 left-0 h-full w-1/2 cursor-pointer -z-2"></div>
   
   <!-- Clickable right half for next -->
-  <div id="next-area" class="absolute top-0 right-0 h-full w-1/2 cursor-pointer z-0"></div>
+  <div id="next-area" class="absolute top-0 right-0 h-full w-1/2 cursor-pointer -z-2"></div>
   
 </div>
 
@@ -32,7 +34,45 @@
   <div id="gridContainer" class="grid gap-2 md:gap-5 lg:gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
 </div>
 
+<!-- Welcome popup (shows only if user hasn't closed it yet) -->
+<div id="welcomePopup"
+     class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
+  <div class="opacity-75 bg-black text-white p-6 rounded-xl w-80 text-center">
+    <h2 class="text-xl text-semibold mb-4">hello</h2>
+    <p class="mb-6 italic">you found my gallery. 
+    </br>all photos on here are unedited (as shot) on old digicams.</p>
+    </br><p class="mb-6 italic text-gray-800 text-sm">contact: lukas.gilow@gmail.com</p>
+    </br>
+    <button id="closePopup"
+            class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:opacity-80">
+      Continue
+    </button>
+  </div>
+</div>
+
 <script>
+
+    // Show welcome popup only if user has NOT closed it before
+    const popup = document.getElementById("welcomePopup");
+    const closeBtn = document.getElementById("closePopup");
+    const openBtn = document.getElementById("openPopup");
+  
+    // Show popup on first visit (unless closed before)
+    if (!localStorage.getItem("closedPopup")) {
+      popup.classList.remove("hidden");
+    }
+  
+    // Close
+    closeBtn.onclick = () => {
+      popup.classList.add("hidden");
+      localStorage.setItem("closedPopup", "true");
+    };
+  
+    // Re-open manually whenever the user wants
+    openBtn.onclick = () => {
+      popup.classList.remove("hidden");
+    };
+    
   let images = [];
   let current = 0;
 
