@@ -18,13 +18,13 @@
 
 <div id="fullscreen" class="flex items-center justify-center h-screen relative">
   <div id="title" class="hidden absolute bottom-5 left-5 md:left-12 text-2xl"></div>
-  <img id="image" class="
+  <img id="image" class="rounded-lg 
     max-w-[100%] 2xl:max-w-[93%] max-h-[100%] 2xl:max-h-[93%] 
     object-contain" src="" alt="">
   <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white text-6xl opacity-50 z-10 scale-95">⋮⋮⋮</button>
   <button id="openPopup" class="absolute top-6 2xl:top-24 right-24 2xl:right-[16.2rem] px-3 py-2 hover:text-white text-6xl opacity-50 z-10 scale-110">▢</button>
   
-  <div id="dotsBar" class="absolute bottom-32 sm:bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2 z-[1000] scale-75 sm:scale-100"></div>
+  <div id="dotsBar" class="opacity-75 absolute bottom-32 sm:bottom-5 left-1/2 transform -translate-x-1/2 flex gap-2 z-[1000] scale-75 sm:scale-100"></div>
   
   <div id="prev" class="text-white opacity-25 hover:opacity-40 absolute left-2 2xl:left-[20rem] text-6xl cursor-pointer scale-100 lg:scale-150 z-50">⟨</div>
   <div id="next" class="text-white opacity-25 hover:opacity-40 absolute right-2 2xl:right-[20rem] text-6xl cursor-pointer scale-100 lg:scale-150 z-50">⟩</div>
@@ -43,8 +43,8 @@
 
 <!-- Welcome popup (shows only if user hasn't closed it yet) -->
 <div id="welcomePopup"
-     class="fixed inset-0 bg-coal/70 flex items-center justify-center z-50 hidden text-sm sm:text-sm">
-  <div class="opacity-75 bg-coal text-gray-200 p-3 sm:p-6 rounded-xl max-w-[75%] xl:max-w-[25%] text-justify">
+     class="fixed inset-0 bg-coal/90 filter saturate-10 flex items-center justify-center z-50 hidden text-sm sm:text-sm">
+  <div class="opacity-50 bg-black text-gray-200 p-3 sm:p-6 rounded-xl max-w-[75%] xl:max-w-[25%] text-justify">
     <h2 class="text-xl text-semibold mb-2">hello.</h2>
     <p class="mb-2 sm:mb-4 italic">you found my gallery. how did you end up here?
       <br><br>all photos are unedited - as shot - on old digicams.</p>
