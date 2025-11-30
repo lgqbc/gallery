@@ -6,11 +6,15 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://cdn.tailwindcss.com; img-src 'self' https:; style-src 'unsafe-inline' https://cdn.tailwindcss.com; connect-src 'self' https://api.github.com">
   <title>Gallery</title>
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- custom colors -->
+  <script>tailwind.config={theme:{extend:{colors:{coal:"#111111"}}}};</script>
+
   <style>
     html, body {overflow-x: hidden;}
   </style>
 </head>
-<body class="bg-black text-gray-400">
+<body class="bg-coal text-gray-400">
 
 <div id="fullscreen" class="flex items-center justify-center h-screen relative">
   <div id="title" class="hidden absolute bottom-5 left-5 md:left-12 text-2xl"></div>
@@ -33,22 +37,22 @@
   
 </div>
 
-<div id="grid" class="hidden bg-black min-h-screen p-5 md:p-12">
+<div id="grid" class="hidden bg-coal min-h-screen p-5 md:p-12">
    <button id="closeGrid" class="text-4xl sm:text-6xl absolute top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full opacity:80 hover:opacity-50 z-10 scale-150">×</button>
   <div id="gridContainer" class="grid gap-2 md:gap-5 lg:gap-10 grid-cols-2 lg:grid-cols-3"></div>
 </div>
 
 <!-- Welcome popup (shows only if user hasn't closed it yet) -->
 <div id="welcomePopup"
-     class="fixed inset-0 bg-black/70 flex items-center justify-center z-50 hidden">
-  <div class="opacity-75 bg-black text-gray-200 p-3 sm:p-6 rounded-xl w-80 text-center">
+     class="fixed inset-0 bg-coal/70 flex items-center justify-center z-50 hidden">
+  <div class="opacity-75 bg-coal text-gray-200 p-3 sm:p-6 rounded-xl w-80 text-center">
     <h2 class="text-xl text-semibold mb-2">hello</h2>
     <p class="mb-1 sm:mb-2 italic">you found my gallery. 
     </br>all photos on here are unedited (as shot) on old digicams.</p>
     </br><p class="mb-1 italic text-gray-600 text-sm">contact: lukas.gilow@gmail.com</p>
     </br>
     <button id="closePopup"
-            class="px-4 py-2 bg-gray-800 text-white rounded-lg hover:opacity-80">
+            class="px-4 py-2 bg-gray-900 text-white rounded-lg hover:opacity-80">
       Continue
     </button>
   </div>
