@@ -34,6 +34,7 @@
 </div>
 
 <div id="grid" class="hidden bg-black min-h-screen p-5 md:p-12">
+   <button id="closeGrid" class="text-4xl sm:text-6xl absolute top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full opacity:80 hover:opacity-50 z-10 scale-150">×</button>
   <div id="gridContainer" class="grid gap-2 md:gap-5 lg:gap-10 grid-cols-2 lg:grid-cols-3"></div>
 </div>
 
@@ -136,7 +137,19 @@
     render();
   }
 
+  document.getElementById("closeGrid").onclick = () => {
+  // hide grid
+  document.getElementById("grid").classList.add("hidden");
 
+  // show fullscreen
+  document.getElementById("fullscreen").classList.remove("hidden");
+  document.getElementById("fullscreen").classList.add("flex");
+
+  // make sure the image updates correctly
+  render();
+  };
+
+  
   document.getElementById('prev-area').addEventListener('click', () => { if (current > 0) { current--; render(); } });
   document.getElementById('next-area').addEventListener('click', () => { if (current < images.length - 1) { current++; render(); } });
   
@@ -147,7 +160,7 @@
       fs.classList.add('hidden');
       fs.classList.remove('flex');
       g.classList.remove('hidden');
-      this.textContent = 'View';
+      this.textContent = '⋮⋮⋮';
       render();
     } else {
       fs.classList.remove('hidden');
