@@ -128,7 +128,7 @@
 
       }
 
-// image loading
+// image
     if (fs.classList.contains('flex')) {
       document.getElementById('image').src = images[current].url;
       document.getElementById('title').textContent = images[current].name;
@@ -150,6 +150,46 @@
     render();
   }
 
+// --- Swipe gestures for mobile ---
+const fs = document.getElementById('fullscreen');
+let startX = 0;
+let startY = 0;
+let isSwiping = false;
+
+fs.addEventListener('touchstart', (e) => {
+  if (e.touches.length === 1) {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    isSwiping = true;
+  }
+});
+
+fs.addEventListener('touchmove', (e) => {
+  if (!isSwiping) return;
+  const dx = e.touches[0].clientX - startX;
+  const dy = e.touches[0].clientY - startY;
+
+  // Only horizontal swipes
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 30) {
+    if (dx < 0 && current < images.length - 1) {
+      // swipe left → next
+      current++;
+      render();
+    } else if (dx > 0 && current > 0) {
+      // swipe right → prev
+      current--;
+      render();
+    }
+    isSwiping = false; // prevent multiple triggers
+  }
+});
+
+fs.addEventListener('touchend', () => {
+  isSwiping = false;
+});
+
+
+  
   document.getElementById("closeGrid").onclick = () => {
 // hide grid
   document.getElementById("grid").classList.add("hidden");
