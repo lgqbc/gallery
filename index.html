@@ -165,8 +165,9 @@ function positionElements() {
   }
 
   // === BUTTONS: Position in top-right space ===
-  // Position buttons closer to image top rather than centered in top space
-  const buttonY = imgRect.top - 60; // 60px above image top
+  // Position buttons in the top space, but ensure they stay in viewport
+  const minButtonY = 40; // Minimum distance from top of viewport
+  const buttonY = Math.max(minButtonY, imgRect.top - 60); // 60px above image top, or min 40px from top
 
   gridBtnEl.style.top = `${buttonY}px`;
   gridBtnEl.style.transform = 'translate(-50%, -50%)';
