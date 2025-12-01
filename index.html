@@ -165,14 +165,23 @@ function positionElements() {
   }
 
   // === BUTTONS: Position in top-right space ===
-  // Position buttons in the top space, but ensure they stay in viewport
-  const minButtonY = 40; // Minimum distance from top of viewport
-  const buttonY = Math.max(minButtonY, imgRect.top - 60); // 60px above image top, or min 40px from top
+  // Position at 50% of top space, similar to arrow logic
+  let gridBtnY, openPopupY;
 
-  gridBtnEl.style.top = `${buttonY}px`;
+  if (topSpace >= MIN_SPACE_FOR_CENTERING) {
+    // Position at 50% of the top space
+    gridBtnY = topSpace / 2;
+    openPopupY = topSpace / 2 + 70; // Stack below grid button
+  } else {
+    // Too narrow, use fixed distance from screen edge
+    gridBtnY = FALLBACK_DISTANCE + 30;
+    openPopupY = FALLBACK_DISTANCE + 100;
+  }
+
+  gridBtnEl.style.top = `${gridBtnY}px`;
   gridBtnEl.style.transform = 'translate(-50%, -50%)';
 
-  openPopupEl.style.top = `${buttonY + 70}px`; // Stack below grid button
+  openPopupEl.style.top = `${openPopupY}px`;
   openPopupEl.style.transform = 'translate(-50%, -50%)';
 
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
