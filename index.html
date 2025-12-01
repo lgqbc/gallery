@@ -167,10 +167,10 @@ function positionElements() {
   // === BUTTONS: Keep vertical position at top, position horizontally like arrows ===
   // Fixed vertical positions near top of viewport
   gridBtnEl.style.top = '24px';
-  gridBtnEl.style.transform = 'translate(-50%, 0)';
+  gridBtnEl.style.transform = 'translateX(-50%)';
 
   openPopupEl.style.top = '94px'; // Stack below grid button
-  openPopupEl.style.transform = 'translate(-50%, 0)';
+  openPopupEl.style.transform = 'translateX(-50%)';
 
   // Horizontal positioning at 50% of right space, like arrows
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
@@ -192,7 +192,11 @@ function positionElements() {
   const dotsX = imgRect.left + (imgRect.width / 2);
   dotsBarEl.style.top = `${dotsY}px`;
   dotsBarEl.style.left = `${dotsX}px`;
-  dotsBarEl.style.transform = 'translateX(-50%)';
+
+  // Apply scale based on viewport width (mobile vs desktop)
+  const isMobile = window.innerWidth < 640; // sm breakpoint
+  const scaleValue = isMobile ? 0.6 : 1;
+  dotsBarEl.style.transform = `translateX(-50%) scale(${scaleValue})`;
 }
 
 function render() {
