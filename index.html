@@ -151,6 +151,7 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
+  const HORIZONTAL_OFFSET = 30; // px to shift all buttons to the right
 
   // === ARROWS: Vertically center with image ===
   const verticalCenter = imgRect.top + (imgRect.height / 2);
@@ -163,17 +164,17 @@ function positionElements() {
 
   // Position left arrow
   if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
-    prevEl.style.left = `${leftSpace / 2}px`;
+    prevEl.style.left = `${(leftSpace / 2) + HORIZONTAL_OFFSET}px`;
   } else {
-    prevEl.style.left = `${FALLBACK_DISTANCE}px`;
+    prevEl.style.left = `${FALLBACK_DISTANCE + HORIZONTAL_OFFSET}px`;
   }
 
   // Position right arrow
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    nextEl.style.right = `${rightSpace / 2}px`;
+    nextEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
     nextEl.style.left = 'auto';
   } else {
-    nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+    nextEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
     nextEl.style.left = 'auto';
   }
 
@@ -187,16 +188,16 @@ function positionElements() {
 
   // Horizontal positioning - same logic as right arrow
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    gridBtnEl.style.right = `${rightSpace / 2}px`;
+    gridBtnEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
     gridBtnEl.style.left = 'auto';
 
-    openPopupEl.style.right = `${rightSpace / 2}px`;
+    openPopupEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
     openPopupEl.style.left = 'auto';
   } else {
-    gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
+    gridBtnEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
     gridBtnEl.style.left = 'auto';
 
-    openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
+    openPopupEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
     openPopupEl.style.left = 'auto';
   }
 
