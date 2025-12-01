@@ -26,8 +26,8 @@
     <img id="image" class="rounded-md
       max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] 
       object-contain" src="" alt="">
-    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50">❬</div>
-    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50">❭</div>
+    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">❬</div>
+    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">❭</div>
   </div>
   
   <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
@@ -135,6 +135,15 @@ function positionArrows() {
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
 
+  // Vertically center arrows with image
+  const verticalCenter = imgRect.top + (imgRect.height / 2);
+  prevEl.style.top = `${verticalCenter}px`;
+  nextEl.style.top = `${verticalCenter}px`;
+
+  // Use transform to center the arrows on the calculated position
+  prevEl.style.transform = 'translate(-50%, -50%) scaleY(4) scaleX(1.4)';
+  nextEl.style.transform = 'translate(-50%, -50%) scaleY(4) scaleX(1.4)';
+
   // Position left arrow
   if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
     // Position at 50% of the space
@@ -148,9 +157,11 @@ function positionArrows() {
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
     // Position at 50% of the space
     nextEl.style.right = `${rightSpace / 2}px`;
+    nextEl.style.left = 'auto';
   } else {
     // Too narrow, use fixed distance from screen edge
     nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+    nextEl.style.left = 'auto';
   }
 }
 
