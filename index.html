@@ -26,8 +26,8 @@
     <img id="image" class="rounded-md
       max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] 
       object-contain" src="" alt="">
-    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50 left-1 xl:-left-5 2xl:-left-12">❬</div>
-    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50 right-1 xl:-right-5 2xl:-right-12">❭</div>
+    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50">❬</div>
+    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 absolute text-2xl sm:text-6xl cursor-pointer scale-y-[400%] scale-x-[140%] z-50">❭</div>
   </div>
   
   <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
@@ -118,6 +118,42 @@ if (current > 0) preloadImage(images[current - 1].url);
     }
   }
 
+// Position arrows based on space between image and screen edges
+function positionArrows() {
+  const imgEl = document.getElementById('image');
+  const prevEl = document.getElementById('prev');
+  const nextEl = document.getElementById('next');
+
+  // Get image position and size
+  const imgRect = imgEl.getBoundingClientRect();
+  const viewportWidth = window.innerWidth;
+
+  // Calculate space on each side
+  const leftSpace = imgRect.left;
+  const rightSpace = viewportWidth - imgRect.right;
+
+  const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
+  const FALLBACK_DISTANCE = 12; // px from screen edge
+
+  // Position left arrow
+  if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
+    // Position at 50% of the space
+    prevEl.style.left = `${leftSpace / 2}px`;
+  } else {
+    // Too narrow, use fixed distance from screen edge
+    prevEl.style.left = `${FALLBACK_DISTANCE}px`;
+  }
+
+  // Position right arrow
+  if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
+    // Position at 50% of the space
+    nextEl.style.right = `${rightSpace / 2}px`;
+  } else {
+    // Too narrow, use fixed distance from screen edge
+    nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+  }
+}
+
 function render() {
   const fs = document.getElementById('fullscreen');
   const g = document.getElementById('grid');
@@ -136,6 +172,11 @@ function render() {
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
+    // Position arrows after image loads
+    imgEl.onload = positionArrows;
+    // Also position immediately in case image is cached
+    positionArrows();
+
     // Update dots
     document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
       const isActive = i === current;
@@ -148,7 +189,7 @@ function render() {
     }).join('');
   } else {
     // Grid view
-    document.getElementById('gridContainer').innerHTML = images.map((img, i) => 
+    document.getElementById('gridContainer').innerHTML = images.map((img, i) =>
       `<div class="select-none cursor-pointer overflow-hidden aspect-square rounded-lg" onclick="setCurrent(${i})">
          <img src="${img.url}" alt="${img.name}" class="w-full h-full object-cover">
        </div>`
@@ -242,7 +283,14 @@ fs.addEventListener('touchend', () => {
   });
 
   loadImages();
-  
+
+  // Reposition arrows on window resize
+  window.addEventListener('resize', () => {
+    if (document.getElementById('fullscreen').classList.contains('flex')) {
+      positionArrows();
+    }
+  });
+
 </script>
 
 </body>
