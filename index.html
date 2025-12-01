@@ -177,35 +177,27 @@ function positionElements() {
     nextEl.style.left = 'auto';
   }
 
-  // === BUTTONS: Keep vertical position at top, position horizontally like arrows ===
-  // Fixed vertical positions near top of viewport
+  // === BUTTONS: Fixed vertical positions at top, horizontal positioning like right arrow ===
   gridBtnEl.style.top = '24px';
   openPopupEl.style.top = '100px'; // Stack below grid button
 
-  // Horizontal positioning at 50% of right space, like arrows
+  // Use same transform as arrows
+  gridBtnEl.style.transform = 'translateX(-50%)';
+  openPopupEl.style.transform = 'translateX(-50%)';
+
+  // Horizontal positioning - same logic as right arrow
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Position at 50% of the right space, using left position instead of right
-    const gridBtnX = viewportWidth - (rightSpace / 2);
-    const openPopupX = viewportWidth - (rightSpace / 2);
+    gridBtnEl.style.right = `${rightSpace / 2}px`;
+    gridBtnEl.style.left = 'auto';
 
-    gridBtnEl.style.left = `${gridBtnX}px`;
-    gridBtnEl.style.right = 'auto';
-    gridBtnEl.style.transform = 'translateX(-50%)';
-
-    openPopupEl.style.left = `${openPopupX}px`;
-    openPopupEl.style.right = 'auto';
-    openPopupEl.style.transform = 'translateX(-50%)';
+    openPopupEl.style.right = `${rightSpace / 2}px`;
+    openPopupEl.style.left = 'auto';
   } else {
-    // Too narrow, use fixed distance from screen edge
-    const fallbackX = viewportWidth - FALLBACK_DISTANCE;
+    gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
+    gridBtnEl.style.left = 'auto';
 
-    gridBtnEl.style.left = `${fallbackX}px`;
-    gridBtnEl.style.right = 'auto';
-    gridBtnEl.style.transform = 'translateX(-50%)';
-
-    openPopupEl.style.left = `${fallbackX}px`;
-    openPopupEl.style.right = 'auto';
-    openPopupEl.style.transform = 'translateX(-50%)';
+    openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
+    openPopupEl.style.left = 'auto';
   }
 
   // === DOTS BAR: Position right underneath image ===
