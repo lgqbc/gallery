@@ -20,6 +20,17 @@
     #prev img, #next img, #gridBtn img, #openPopup img {
       filter: brightness(0) invert(1);
     }
+
+    /* Prevent button shrinking */
+    #gridBtn, #openPopup {
+      min-width: 88px;
+      min-height: 88px;
+    }
+
+    #gridBtn img, #openPopup img {
+      min-width: 64px;
+      min-height: 64px;
+    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -39,11 +50,11 @@
     </div>
   </div>
   
-  <button id="gridBtn" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10">
-    <img src="icons/gridBtn.svg" alt="Grid" class="w-16 h-16">
+  <button id="gridBtn" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10 shrink-0">
+    <img src="icons/gridBtn.svg" alt="Grid" class="w-16 h-16 shrink-0">
   </button>
-  <button id="openPopup" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10">
-    <img src="icons/openPopup.svg" alt="Info" class="w-16 h-16">
+  <button id="openPopup" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10 shrink-0">
+    <img src="icons/openPopup.svg" alt="Info" class="w-16 h-16 shrink-0">
   </button>
 
   <div id="dotsBar" class="fixed flex gap-3 z-10 scale-[60%] sm:scale-100"></div>
