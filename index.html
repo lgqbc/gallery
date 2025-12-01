@@ -30,10 +30,10 @@
     <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">❭</div>
   </div>
   
-  <button id="gridBtn" class="absolute top-6 right-3 2xl:right-64 px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
-  <button id="openPopup" class="absolute top-6 2xl:top-24 right-24 2xl:right-64 px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10 transform -translate-y-[0.2rem] 2xl:translate-y-none">⋅⋅⋅</button>
-  
-  <div id="dotsBar" class="absolute bottom-32 sm:bottom-5 left-1/2 transform -translate-x-1/2 flex gap-3 z-10 scale-[60%] sm:scale-100"></div>
+  <button id="gridBtn" class="fixed px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
+  <button id="openPopup" class="fixed px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋅⋅⋅</button>
+
+  <div id="dotsBar" class="fixed flex gap-3 z-10 scale-[60%] sm:scale-100"></div>
 
   <!-- Clickable left half for previous -->
   <div id="prev-area" class="absolute top-0 left-0 bottom-36 sm:bottom-6 w-1/2 cursor-pointer -z-2"></div>
@@ -118,11 +118,14 @@ if (current > 0) preloadImage(images[current - 1].url);
     }
   }
 
-// Position arrows based on space between image and screen edges
-function positionArrows() {
+// Position all elements based on image bounds
+function positionElements() {
   const imgEl = document.getElementById('image');
   const prevEl = document.getElementById('prev');
   const nextEl = document.getElementById('next');
+  const gridBtnEl = document.getElementById('gridBtn');
+  const openPopupEl = document.getElementById('openPopup');
+  const dotsBarEl = document.getElementById('dotsBar');
 
   // Get image position and size
   const imgRect = imgEl.getBoundingClientRect();
@@ -131,11 +134,12 @@ function positionArrows() {
   // Calculate space on each side
   const leftSpace = imgRect.left;
   const rightSpace = viewportWidth - imgRect.right;
+  const topSpace = imgRect.top;
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
 
-  // Vertically center arrows with image
+  // === ARROWS: Vertically center with image ===
   const verticalCenter = imgRect.top + (imgRect.height / 2);
   prevEl.style.top = `${verticalCenter}px`;
   nextEl.style.top = `${verticalCenter}px`;
@@ -146,23 +150,49 @@ function positionArrows() {
 
   // Position left arrow
   if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Position at 50% of the space
     prevEl.style.left = `${leftSpace / 2}px`;
   } else {
-    // Too narrow, use fixed distance from screen edge
     prevEl.style.left = `${FALLBACK_DISTANCE}px`;
   }
 
   // Position right arrow
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Position at 50% of the space
     nextEl.style.right = `${rightSpace / 2}px`;
     nextEl.style.left = 'auto';
   } else {
-    // Too narrow, use fixed distance from screen edge
     nextEl.style.right = `${FALLBACK_DISTANCE}px`;
     nextEl.style.left = 'auto';
   }
+
+  // === BUTTONS: Position in top-right space ===
+  const topRightY = topSpace >= MIN_SPACE_FOR_CENTERING ? topSpace / 2 : FALLBACK_DISTANCE;
+
+  gridBtnEl.style.top = `${topRightY}px`;
+  gridBtnEl.style.transform = 'translate(-50%, -50%)';
+
+  openPopupEl.style.top = `${topRightY}px`;
+  openPopupEl.style.transform = 'translate(-50%, -50%)';
+
+  if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
+    // Stack buttons horizontally in the right space
+    const buttonSpacing = 80; // spacing between buttons
+    gridBtnEl.style.right = `${rightSpace / 2 - buttonSpacing / 2}px`;
+    gridBtnEl.style.left = 'auto';
+    openPopupEl.style.right = `${rightSpace / 2 + buttonSpacing / 2}px`;
+    openPopupEl.style.left = 'auto';
+  } else {
+    gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
+    gridBtnEl.style.left = 'auto';
+    openPopupEl.style.right = `${FALLBACK_DISTANCE + 60}px`;
+    openPopupEl.style.left = 'auto';
+  }
+
+  // === DOTS BAR: Position right underneath image ===
+  const dotsY = imgRect.bottom + 20; // 20px below image
+  const dotsX = imgRect.left + (imgRect.width / 2);
+  dotsBarEl.style.top = `${dotsY}px`;
+  dotsBarEl.style.left = `${dotsX}px`;
+  dotsBarEl.style.transform = 'translateX(-50%)';
 }
 
 function render() {
@@ -183,10 +213,10 @@ function render() {
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
-    // Position arrows after image loads
-    imgEl.onload = positionArrows;
+    // Position elements after image loads
+    imgEl.onload = positionElements;
     // Also position immediately in case image is cached
-    positionArrows();
+    positionElements();
 
     // Update dots
     document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
@@ -295,10 +325,10 @@ fs.addEventListener('touchend', () => {
 
   loadImages();
 
-  // Reposition arrows on window resize
+  // Reposition elements on window resize
   window.addEventListener('resize', () => {
     if (document.getElementById('fullscreen').classList.contains('flex')) {
-      positionArrows();
+      positionElements();
     }
   });
 
