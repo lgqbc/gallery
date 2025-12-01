@@ -39,10 +39,10 @@
     </div>
   </div>
   
-  <button id="gridBtn" class="fixed px-3 py-2 opacity-50 hover:opacity-100 active:opacity-100 z-10">
+  <button id="gridBtn" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10">
     <img src="icons/gridBtn.svg" alt="Grid" class="w-16 h-16">
   </button>
-  <button id="openPopup" class="fixed px-3 py-2 opacity-50 hover:opacity-100 active:opacity-100 z-10">
+  <button id="openPopup" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10">
     <img src="icons/openPopup.svg" alt="Info" class="w-16 h-16">
   </button>
 
@@ -180,7 +180,7 @@ function positionElements() {
   // === BUTTONS: Keep vertical position at top, position horizontally like arrows ===
   // Fixed vertical positions near top of viewport
   gridBtnEl.style.top = '24px';
-  openPopupEl.style.top = '94px'; // Stack below grid button
+  openPopupEl.style.top = '100px'; // Stack below grid button
 
   // Horizontal positioning at 50% of right space, like arrows
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
