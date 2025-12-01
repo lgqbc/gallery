@@ -165,25 +165,25 @@ function positionElements() {
   }
 
   // === BUTTONS: Position in top-right space ===
-  const topRightY = topSpace >= MIN_SPACE_FOR_CENTERING ? topSpace / 2 : FALLBACK_DISTANCE;
+  // Position buttons closer to image top rather than centered in top space
+  const buttonY = imgRect.top - 60; // 60px above image top
 
-  gridBtnEl.style.top = `${topRightY}px`;
+  gridBtnEl.style.top = `${buttonY}px`;
   gridBtnEl.style.transform = 'translate(-50%, -50%)';
 
-  openPopupEl.style.top = `${topRightY}px`;
+  openPopupEl.style.top = `${buttonY + 70}px`; // Stack below grid button
   openPopupEl.style.transform = 'translate(-50%, -50%)';
 
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Stack buttons horizontally in the right space
-    const buttonSpacing = 80; // spacing between buttons
-    gridBtnEl.style.right = `${rightSpace / 2 - buttonSpacing / 2}px`;
+    // Center buttons in the right space
+    gridBtnEl.style.right = `${rightSpace / 2}px`;
     gridBtnEl.style.left = 'auto';
-    openPopupEl.style.right = `${rightSpace / 2 + buttonSpacing / 2}px`;
+    openPopupEl.style.right = `${rightSpace / 2}px`;
     openPopupEl.style.left = 'auto';
   } else {
     gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
     gridBtnEl.style.left = 'auto';
-    openPopupEl.style.right = `${FALLBACK_DISTANCE + 60}px`;
+    openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
     openPopupEl.style.left = 'auto';
   }
 
