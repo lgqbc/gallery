@@ -178,32 +178,51 @@ function positionElements() {
   }
 
   // === BUTTONS: Keep vertical position at top, position horizontally like arrows ===
-  // Fixed vertical positions near top of viewport
-  gridBtnEl.style.top = '24px';
-  openPopupEl.style.top = '100px'; // Stack below grid button
+  const MIN_BUTTON_SPACE = 100; // Minimum space needed for buttons (button width + padding)
 
-  // Horizontal positioning at 50% of right space, like arrows
-  if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Position at 50% of the right space, using left position instead of right
-    const gridBtnX = viewportWidth - (rightSpace / 2);
-    const openPopupX = viewportWidth - (rightSpace / 2);
+  // Check if we have enough space for buttons in the margin
+  if (rightSpace >= MIN_BUTTON_SPACE) {
+    // Enough space in margin - position in right space like arrows
+    // Fixed vertical positions near top of viewport
+    gridBtnEl.style.top = '24px';
+    openPopupEl.style.top = '100px'; // Stack below grid button
 
-    gridBtnEl.style.left = `${gridBtnX}px`;
-    gridBtnEl.style.right = 'auto';
-    gridBtnEl.style.transform = 'translateX(-50%)';
+    // Horizontal positioning at 50% of right space, like arrows
+    if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
+      // Position at 50% of the right space, using left position instead of right
+      const gridBtnX = viewportWidth - (rightSpace / 2);
+      const openPopupX = viewportWidth - (rightSpace / 2);
 
-    openPopupEl.style.left = `${openPopupX}px`;
-    openPopupEl.style.right = 'auto';
-    openPopupEl.style.transform = 'translateX(-50%)';
+      gridBtnEl.style.left = `${gridBtnX}px`;
+      gridBtnEl.style.right = 'auto';
+      gridBtnEl.style.transform = 'translateX(-50%)';
+
+      openPopupEl.style.left = `${openPopupX}px`;
+      openPopupEl.style.right = 'auto';
+      openPopupEl.style.transform = 'translateX(-50%)';
+    } else {
+      // Too narrow, use fixed distance from screen edge
+      const fallbackX = viewportWidth - FALLBACK_DISTANCE;
+
+      gridBtnEl.style.left = `${fallbackX}px`;
+      gridBtnEl.style.right = 'auto';
+      gridBtnEl.style.transform = 'translateX(-50%)';
+
+      openPopupEl.style.left = `${fallbackX}px`;
+      openPopupEl.style.right = 'auto';
+      openPopupEl.style.transform = 'translateX(-50%)';
+    }
   } else {
-    // Too narrow, use fixed distance from screen edge
-    const fallbackX = viewportWidth - FALLBACK_DISTANCE;
+    // Not enough space - position on top of image in top-right corner
+    const buttonX = imgRect.right - 24; // 24px from right edge of image
 
-    gridBtnEl.style.left = `${fallbackX}px`;
+    gridBtnEl.style.left = `${buttonX}px`;
+    gridBtnEl.style.top = `${imgRect.top + 12}px`; // 12px from top of image
     gridBtnEl.style.right = 'auto';
     gridBtnEl.style.transform = 'translateX(-50%)';
 
-    openPopupEl.style.left = `${fallbackX}px`;
+    openPopupEl.style.left = `${buttonX}px`;
+    openPopupEl.style.top = `${imgRect.top + 88}px`; // Stack below grid button (12 + 76)
     openPopupEl.style.right = 'auto';
     openPopupEl.style.transform = 'translateX(-50%)';
   }
