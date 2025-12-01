@@ -13,8 +13,13 @@
   <style>
     @media (hover: none) {
       .hover\:opacity-100 { opacity: 0.6 !important; }
-    }   
+    }
     html, body {overflow-x: hidden;}
+
+    /* Make SVG icons white */
+    #prev img, #next img, #gridBtn img, #openPopup img {
+      filter: brightness(0) invert(1);
+    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -26,12 +31,20 @@
     <img id="image" class="rounded-md
       max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] 
       object-contain" src="" alt="">
-    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">❬</div>
-    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">❭</div>
+    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">
+      <img src="icons/prev.svg" alt="Previous" class="w-6 h-6 sm:w-12 sm:h-12">
+    </div>
+    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed text-2xl sm:text-6xl cursor-pointer z-50">
+      <img src="icons/next.svg" alt="Next" class="w-6 h-6 sm:w-12 sm:h-12">
+    </div>
   </div>
   
-  <button id="gridBtn" class="fixed px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋮⋮⋮</button>
-  <button id="openPopup" class="fixed px-3 py-2 hover:text-white active:text-white text-6xl opacity-50 z-10">⋅⋅⋅</button>
+  <button id="gridBtn" class="fixed px-3 py-2 hover:text-white active:text-white opacity-50 z-10">
+    <img src="icons/gridBtn.svg" alt="Grid" class="w-8 h-8">
+  </button>
+  <button id="openPopup" class="fixed px-3 py-2 hover:text-white active:text-white opacity-50 z-10">
+    <img src="icons/openPopup.svg" alt="Info" class="w-8 h-8">
+  </button>
 
   <div id="dotsBar" class="fixed flex gap-3 z-10 scale-[60%] sm:scale-100"></div>
 
@@ -145,8 +158,8 @@ function positionElements() {
   nextEl.style.top = `${verticalCenter}px`;
 
   // Use transform to center the arrows on the calculated position
-  prevEl.style.transform = 'translate(-50%, -50%) scaleY(4) scaleX(1.4)';
-  nextEl.style.transform = 'translate(-50%, -50%) scaleY(4) scaleX(1.4)';
+  prevEl.style.transform = 'translate(-50%, -50%)';
+  nextEl.style.transform = 'translate(-50%, -50%)';
 
   // Position left arrow
   if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
