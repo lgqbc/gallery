@@ -164,33 +164,23 @@ function positionElements() {
     nextEl.style.left = 'auto';
   }
 
-  // === BUTTONS: Position in top-right space ===
-  // Position at 50% of top space, similar to arrow logic
-  let gridBtnY, openPopupY;
+  // === BUTTONS: Keep vertical position at top, position horizontally like arrows ===
+  // Fixed vertical positions near top of viewport
+  gridBtnEl.style.top = '24px';
+  gridBtnEl.style.transform = 'translate(-50%, 0)';
 
-  if (topSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Position at 50% of the top space
-    gridBtnY = topSpace / 2;
-    openPopupY = topSpace / 2 + 70; // Stack below grid button
-  } else {
-    // Too narrow, use fixed distance from screen edge
-    gridBtnY = FALLBACK_DISTANCE + 30;
-    openPopupY = FALLBACK_DISTANCE + 100;
-  }
+  openPopupEl.style.top = '94px'; // Stack below grid button
+  openPopupEl.style.transform = 'translate(-50%, 0)';
 
-  gridBtnEl.style.top = `${gridBtnY}px`;
-  gridBtnEl.style.transform = 'translate(-50%, -50%)';
-
-  openPopupEl.style.top = `${openPopupY}px`;
-  openPopupEl.style.transform = 'translate(-50%, -50%)';
-
+  // Horizontal positioning at 50% of right space, like arrows
   if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    // Center buttons in the right space
+    // Position at 50% of the right space
     gridBtnEl.style.right = `${rightSpace / 2}px`;
     gridBtnEl.style.left = 'auto';
     openPopupEl.style.right = `${rightSpace / 2}px`;
     openPopupEl.style.left = 'auto';
   } else {
+    // Too narrow, use fixed distance from screen edge
     gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
     gridBtnEl.style.left = 'auto';
     openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
