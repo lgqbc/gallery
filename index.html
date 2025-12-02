@@ -11,6 +11,20 @@
   <script>tailwind.config={theme:{extend:{colors:{coal:"#111111"}}}};</script>
 
   <style>
+    @media (hover: none) {
+      .hover\:opacity-100 { opacity: 0.6 !important; }
+    }
+
+    /* Fix arrow hover stuck issue on touch devices */
+    @media (pointer: coarse) {
+      #prev:hover, #next:hover {
+        opacity: 0.25 !important;
+      }
+      #prev:active, #next:active {
+        opacity: 0.4 !important;
+      }
+    }
+
     html, body {overflow-x: hidden;}
 
     /* Make SVG icons white */
