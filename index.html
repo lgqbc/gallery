@@ -44,24 +44,18 @@
       opacity: 0;
     }
 
-    @keyframes slide-left {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-20px); opacity: 0.5; }
+    @keyframes slide-from-left {
+      from { transform: translateX(8px); opacity: 0.85; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
-    @keyframes slide-right {
-      from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(20px); opacity: 0.5; }
+    @keyframes slide-from-right {
+      from { transform: translateX(-8px); opacity: 0.85; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
-    @keyframes slide-in {
-      from { opacity: 0.5; }
-      to { opacity: 1; }
-    }
-
-    #image.swipe-left { animation: slide-left 0.1s ease-out; }
-    #image.swipe-right { animation: slide-right 0.1s ease-out; }
-    #image.swipe-in { animation: slide-in 0.1s ease-out; }
+    #image.swipe-from-left { animation: slide-from-left 0.08s ease-out; }
+    #image.swipe-from-right { animation: slide-from-right 0.08s ease-out; }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -332,24 +326,19 @@ function render() {
 function navigate(delta) {
   const next = current + delta;
   if (next >= 0 && next < images.length) {
+    current = next;
     const img = document.getElementById('image');
 
-    // Apply swipe-out animation
-    img.className = img.className.replace(/swipe-\w+/g, '').trim();
-    img.classList.add(delta > 0 ? 'swipe-left' : 'swipe-right');
+    // Apply animation when new image loads
+    img.className = img.className.replace(/swipe-from-\w+/g, '').trim();
+    img.classList.add(delta > 0 ? 'swipe-from-right' : 'swipe-from-left');
 
-    // Change image after brief delay, then apply swipe-in
+    render();
+
+    // Clean up animation class
     setTimeout(() => {
-      current = next;
-      img.className = img.className.replace(/swipe-\w+/g, '').trim();
-      img.classList.add('swipe-in');
-      render();
-
-      // Clean up animation class
-      setTimeout(() => {
-        img.className = img.className.replace(/swipe-\w+/g, '').trim();
-      }, 100);
-    }, 100);
+      img.className = img.className.replace(/swipe-from-\w+/g, '').trim();
+    }, 80);
   }
 }
 
