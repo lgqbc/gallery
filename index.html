@@ -268,7 +268,7 @@ function positionElements() {
   }
 
   // === DOTS BAR: Smart positioning based on available space ===
-  // Use actual image bounds for vertical positioning (not hypothetical)
+  // Use actual image bounds for both vertical and horizontal positioning
   const actualImgRect = imgEl.getBoundingClientRect();
   const spaceBelow = viewportHeight - actualImgRect.bottom;
   const SPACE_THRESHOLD = 10; // px threshold for "very little space"
@@ -283,8 +283,8 @@ function positionElements() {
     dotsY = actualImgRect.bottom - INSIDE_MARGIN;
   }
 
-  // Use hypothetical bounds for horizontal centering (landscape-oriented)
-  const dotsX = imgRect.left + (imgRect.width / 2);
+  // Use actual image center for horizontal positioning
+  const dotsX = actualImgRect.left + (actualImgRect.width / 2);
   dotsBarEl.style.top = `${dotsY}px`;
   dotsBarEl.style.left = `${dotsX}px`;
 
