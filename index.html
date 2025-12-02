@@ -210,7 +210,7 @@ function updateDots() {
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
         <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        ${loading ? '<div class="absolute" style="top: -12px; left: -12px; width: 32px; height: 32px; background: red; border: 2px solid yellow; z-index: 9999; border-radius: 50%;"></div>' : ''}
+        ${loading ? '<div class="absolute" style="top: -20px !important; left: -20px !important; width: 48px !important; height: 48px !important; background: red !important; border: 4px solid yellow !important; z-index: 99999 !important; border-radius: 50% !important;"></div>' : ''}
       </div>
     `;
   }).join('');
