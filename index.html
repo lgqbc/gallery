@@ -22,19 +22,7 @@
       }
     }
 
-    html, body {
-      overflow-x: hidden;
-      min-height: 100vh;
-      min-height: 100dvh;
-    }
-
-    /* Ensure body is scrollable on mobile for browser bar auto-hide */
-    @media (pointer: coarse) {
-      body {
-        min-height: calc(100vh + 1px);
-        min-height: calc(100dvh + 1px);
-      }
-    }
+    html, body {overflow-x: hidden;}
 
     #prev img, #next img, #gridBtn img, #openPopup img {
       filter: brightness(0) invert(1);
@@ -131,19 +119,6 @@ document.getElementById("contactToggle").onclick = function() {
 
 // State
 let images = [], current = 0, loadingImage = null;
-
-// Helper to trigger browser bar auto-hide on mobile
-function hideMobileBrowserBar() {
-  // Only on mobile/touch devices
-  if (window.matchMedia('(pointer: coarse)').matches) {
-    // Larger scroll to ensure browser UI hides (Firefox needs more distance)
-    setTimeout(() => {
-      window.scrollTo({ top: 100, behavior: 'instant' });
-      // Scroll back to top after browser has time to hide the bar
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'instant' }), 300);
-    }, 50);
-  }
-}
 
 // Image loading
 async function loadImages() {
@@ -310,7 +285,6 @@ function render() {
         }
       }
       reposition();
-      hideMobileBrowserBar();
     };
 
     // For cached images, trigger onload manually after a brief delay to allow UI to update
@@ -344,7 +318,6 @@ function setCurrent(i) {
   fs.classList.add('flex');
   document.getElementById('grid').classList.add('hidden');
   render();
-  hideMobileBrowserBar();
 }
 
 // View switching
