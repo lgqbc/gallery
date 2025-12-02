@@ -198,6 +198,7 @@ function positionElements() {
 
 // Update dots bar with loading indicator
 function updateDots() {
+  console.log('updateDots called, loadingImage:', loadingImage, 'current:', current);
   document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
     const active = i === current;
     const loading = i === loadingImage;
@@ -205,7 +206,7 @@ function updateDots() {
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
         <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none">' : ''}
+        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" style="filter: brightness(0) invert(1);">' : ''}
       </div>
     `;
   }).join('');
@@ -240,18 +241,18 @@ function render() {
     // Position elements after image loads
     const reposition = () => requestAnimationFrame(positionElements);
     img.onload = () => {
+      console.log('Image loaded, clearing loading state');
       if (loadingImage === loadingIndex) {
         loadingImage = null;
         updateDots();
       }
       reposition();
     };
+
+    // For cached images, trigger onload manually after a brief delay to allow UI to update
     if (img.complete && img.naturalHeight !== 0) {
-      if (loadingImage === loadingIndex) {
-        loadingImage = null;
-        updateDots();
-      }
-      reposition();
+      console.log('Image already complete, triggering onload');
+      setTimeout(() => img.onload(), 0);
     }
   } else {
     // Grid view
