@@ -110,6 +110,14 @@ document.getElementById("closePopup").onclick = () => {
 
 document.getElementById("openPopup").onclick = () => popup.classList.remove("hidden");
 
+// Close popup when clicking backdrop
+popup.onclick = (e) => {
+  if (e.target.id === 'welcomePopup') {
+    popup.classList.add("hidden");
+    localStorage.setItem("closedPopup", "true");
+  }
+};
+
 // Contact toggle
 document.getElementById("contactToggle").onclick = function() {
   this.textContent = this.textContent === "Contact"
