@@ -14,6 +14,17 @@
     @media (hover: none) {
       .hover\:opacity-100 { opacity: 0.6 !important; }
     }
+
+    /* Fix arrow hover stuck issue on touch devices */
+    @media (pointer: coarse) {
+      #prev:hover, #next:hover {
+        opacity: 0.25 !important;
+      }
+      #prev:active, #next:active {
+        opacity: 0.4 !important;
+      }
+    }
+
     html, body {overflow-x: hidden;}
 
     /* Make SVG icons white */
@@ -188,9 +199,15 @@ function positionElements() {
   const topSpace = imgRect.top;
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
-  const FALLBACK_DISTANCE = 12; // px from screen edge
-  const isMobile = viewportWidth < 640; // sm breakpoint
-  const isMedium = viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
+  const FALLBACK_DISTANCE = 12; // px from screen edge (desktop)
+
+  // Improved mobile detection for landscape orientation
+  const smallestDimension = Math.min(viewportWidth, viewportHeight);
+  const isMobile = viewportWidth < 640 || smallestDimension < 500;
+  const isMedium = !isMobile && viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
+
+  // Mobile needs more space: 48px arrow / 2 (transform) + margin = ~30px
+  const MOBILE_ARROW_OFFSET = 30; // px from screen edge on mobile
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
@@ -206,9 +223,9 @@ function positionElements() {
 
   // Position arrows
   if (isMobile) {
-    // Mobile: fixed distance from screen edges (on top of image)
-    prevEl.style.left = `${FALLBACK_DISTANCE}px`;
-    nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+    // Mobile: use larger offset to account for arrow size (48px) + transform centering
+    prevEl.style.left = `${MOBILE_ARROW_OFFSET}px`;
+    nextEl.style.right = `${MOBILE_ARROW_OFFSET}px`;
     nextEl.style.left = 'auto';
   } else {
     // Desktop/Medium: center in margin space, or fallback if not enough space
