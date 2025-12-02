@@ -151,7 +151,7 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
-  const HORIZONTAL_OFFSET = window.innerWidth >= 640 ? 30 : 0; // px to shift all buttons to the right (only on sm: and larger)
+  const isMobile = window.innerWidth < 640; // sm breakpoint
 
   // === ARROWS: Vertically center with image ===
   const verticalCenter = imgRect.top + (imgRect.height / 2);
@@ -162,20 +162,27 @@ function positionElements() {
   prevEl.style.transform = 'translate(-50%, -50%)';
   nextEl.style.transform = 'translate(-50%, -50%)';
 
-  // Position left arrow
-  if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
-    prevEl.style.left = `${(leftSpace / 2) + HORIZONTAL_OFFSET}px`;
+  // Position arrows
+  if (isMobile) {
+    // Mobile: fixed distance from screen edges (on top of image)
+    prevEl.style.left = `${FALLBACK_DISTANCE}px`;
+    nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+    nextEl.style.left = 'auto';
   } else {
-    prevEl.style.left = `${FALLBACK_DISTANCE + HORIZONTAL_OFFSET}px`;
-  }
+    // Desktop: center in margin space, or fallback if not enough space
+    if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
+      prevEl.style.left = `${leftSpace / 2}px`;
+    } else {
+      prevEl.style.left = `${FALLBACK_DISTANCE}px`;
+    }
 
-  // Position right arrow
-  if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    nextEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
-    nextEl.style.left = 'auto';
-  } else {
-    nextEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
-    nextEl.style.left = 'auto';
+    if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
+      nextEl.style.right = `${rightSpace / 2}px`;
+      nextEl.style.left = 'auto';
+    } else {
+      nextEl.style.right = `${FALLBACK_DISTANCE}px`;
+      nextEl.style.left = 'auto';
+    }
   }
 
   // === BUTTONS: Fixed vertical positions at top, horizontal positioning like right arrow ===
@@ -187,18 +194,25 @@ function positionElements() {
   openPopupEl.style.transform = 'translateX(-50%)';
 
   // Horizontal positioning - same logic as right arrow
-  if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-    gridBtnEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
+  if (isMobile) {
+    // Mobile: fixed distance from screen edge
+    gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
     gridBtnEl.style.left = 'auto';
-
-    openPopupEl.style.right = `${(rightSpace / 2) - HORIZONTAL_OFFSET}px`;
+    openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
     openPopupEl.style.left = 'auto';
   } else {
-    gridBtnEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
-    gridBtnEl.style.left = 'auto';
-
-    openPopupEl.style.right = `${FALLBACK_DISTANCE - HORIZONTAL_OFFSET}px`;
-    openPopupEl.style.left = 'auto';
+    // Desktop: center in margin space, or fallback if not enough space
+    if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
+      gridBtnEl.style.right = `${rightSpace / 2}px`;
+      gridBtnEl.style.left = 'auto';
+      openPopupEl.style.right = `${rightSpace / 2}px`;
+      openPopupEl.style.left = 'auto';
+    } else {
+      gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
+      gridBtnEl.style.left = 'auto';
+      openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
+      openPopupEl.style.left = 'auto';
+    }
   }
 
   // === DOTS BAR: Position right underneath image ===
