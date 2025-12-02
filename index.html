@@ -199,9 +199,10 @@ function positionElements() {
 // Update dots bar with loading indicator
 function updateDots() {
   console.log('updateDots called, loadingImage:', loadingImage, 'current:', current);
-  document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
+  const html = images.map((_, i) => {
     const active = i === current;
     const loading = i === loadingImage;
+    if (loading) console.log('Dot', i, 'should show loading indicator');
     return `
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
@@ -210,6 +211,7 @@ function updateDots() {
       </div>
     `;
   }).join('');
+  document.getElementById('dotsBar').innerHTML = html;
 }
 
 // Render current state
