@@ -150,8 +150,8 @@ function positionElements() {
   const topSpace = imgRect.top;
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
-  const FALLBACK_DISTANCE = 42; // px from screen edge (increased to accommodate offset)
-  const HORIZONTAL_OFFSET = 30; // px to shift all buttons to the right
+  const FALLBACK_DISTANCE = 12; // px from screen edge
+  const HORIZONTAL_OFFSET = window.innerWidth >= 640 ? 30 : 0; // px to shift all buttons to the right (only on sm: and larger)
 
   // === ARROWS: Vertically center with image ===
   const verticalCenter = imgRect.top + (imgRect.height / 2);
