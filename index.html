@@ -93,7 +93,7 @@ document.getElementById("closePopup").onclick = () => {
 document.getElementById("openPopup").onclick = () => popup.classList.remove("hidden");
 
 // State
-let images = [], current = 0;
+let images = [], current = 0, loadingImage = null;
 
 // Image loading
 async function loadImages() {
@@ -196,12 +196,29 @@ function positionElements() {
   dotsBar.style.transform = `translateX(-50%) scale(${isMobile ? 0.6 : 1})`;
 }
 
+// Update dots bar with loading indicator
+function updateDots() {
+  document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
+    const active = i === current;
+    const loading = i === loadingImage;
+    return `
+      <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
+        <div class="absolute inset-[-7px]"></div>
+        <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
+        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute inset-0 w-full h-full">' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
 // Render current state
 function render() {
   const fs = document.getElementById('fullscreen');
   const img = document.getElementById('image');
   const isFullscreen = fs.classList.contains('flex');
 
+  // Track which image is loading
+  loadingImage = current;
   img.src = images[current].url;
 
   if (isFullscreen) {
@@ -215,20 +232,24 @@ function render() {
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
     // Position elements after image loads
+    const loadingIndex = current; // Capture for closure
     const reposition = () => requestAnimationFrame(positionElements);
-    img.onload = reposition;
-    if (img.complete && img.naturalHeight !== 0) reposition();
+    img.onload = () => {
+      if (loadingImage === loadingIndex) {
+        loadingImage = null;
+        updateDots();
+      }
+      reposition();
+    };
+    if (img.complete && img.naturalHeight !== 0) {
+      if (loadingImage === current) {
+        loadingImage = null;
+      }
+      reposition();
+    }
 
     // Update dots
-    document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
-      const active = i === current;
-      return `
-        <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
-          <div class="absolute inset-[-7px]"></div>
-          <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        </div>
-      `;
-    }).join('');
+    updateDots();
   } else {
     // Grid view
     document.getElementById('gridContainer').innerHTML = images.map((img, i) =>
