@@ -43,10 +43,6 @@
       animation: pulse-ring 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite 0.25s;
       opacity: 0;
     }
-
-    .loading-pulse-finish {
-      animation: pulse-ring 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) 1;
-    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -264,14 +260,13 @@ function render() {
         // Find the loading indicator and let it finish its current cycle
         const indicator = document.querySelector('.loading-pulse');
         if (indicator) {
-          indicator.classList.remove('loading-pulse');
-          indicator.classList.add('loading-pulse-finish');
-          indicator.addEventListener('animationend', () => {
+          // Wait for the current animation cycle to complete
+          indicator.addEventListener('animationiteration', () => {
             loadingImage = null;
             updateDots();
           }, { once: true });
         } else {
-          // No indicator found (likely completed delay period), just clear immediately
+          // No indicator found (likely during delay period or already finished)
           loadingImage = null;
           updateDots();
         }
