@@ -205,7 +205,7 @@ function updateDots() {
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
         <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute inset-0 w-full h-full">' : ''}
+        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none">' : ''}
       </div>
     `;
   }).join('');
@@ -217,22 +217,27 @@ function render() {
   const img = document.getElementById('image');
   const isFullscreen = fs.classList.contains('flex');
 
-  // Track which image is loading
-  loadingImage = current;
-  img.src = images[current].url;
-
   if (isFullscreen) {
-    // Preload adjacent images
-    if (current > 0) new Image().src = images[current - 1].url;
-    if (current < images.length - 1) new Image().src = images[current + 1].url;
+    // Track which image is loading
+    const loadingIndex = current; // Capture for closure
+    loadingImage = current;
+
+    // Update dots to show loading state
+    updateDots();
 
     // Update UI
     document.getElementById('title').textContent = images[current].name.startsWith("DSC") ? "" : images[current].name;
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
+    // Set image source
+    img.src = images[current].url;
+
+    // Preload adjacent images
+    if (current > 0) new Image().src = images[current - 1].url;
+    if (current < images.length - 1) new Image().src = images[current + 1].url;
+
     // Position elements after image loads
-    const loadingIndex = current; // Capture for closure
     const reposition = () => requestAnimationFrame(positionElements);
     img.onload = () => {
       if (loadingImage === loadingIndex) {
@@ -242,14 +247,12 @@ function render() {
       reposition();
     };
     if (img.complete && img.naturalHeight !== 0) {
-      if (loadingImage === current) {
+      if (loadingImage === loadingIndex) {
         loadingImage = null;
+        updateDots();
       }
       reposition();
     }
-
-    // Update dots
-    updateDots();
   } else {
     // Grid view
     document.getElementById('gridContainer').innerHTML = images.map((img, i) =>
