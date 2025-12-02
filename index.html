@@ -143,15 +143,15 @@ function positionElements() {
   // FIXED: Always use landscape aspect ratio (3072/2304) for UI positioning
   const LANDSCAPE_RATIO = 3072 / 2304; // 1.333...
 
-  // Get viewport dimensions
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+  // Get viewport dimensions (excluding scrollbars)
+  const viewportWidth = document.documentElement.clientWidth;
+  const viewportHeight = document.documentElement.clientHeight;
 
   // Calculate hypothetical landscape image bounds
   let hypotheticalWidth, hypotheticalHeight;
 
   // Check which dimension constrains the image (respecting max-height constraints)
-  const maxHeight = window.innerWidth >= 1536 ? viewportHeight * 0.95 : viewportHeight;
+  const maxHeight = viewportWidth >= 1536 ? viewportHeight * 0.95 : viewportHeight;
 
   if (viewportWidth / maxHeight > LANDSCAPE_RATIO) {
     // Height-constrained
@@ -194,8 +194,8 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
-  const isMobile = window.innerWidth < 640; // sm breakpoint
-  const isMedium = window.innerWidth >= 640 && window.innerWidth < 1024; // md breakpoint
+  const isMobile = viewportWidth < 640; // sm breakpoint
+  const isMedium = viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
@@ -236,7 +236,7 @@ function positionElements() {
   // === BUTTONS: Fixed vertical positions at top, horizontal positioning like right arrow ===
   gridBtnEl.style.top = '24px';
   function setPopupTop() {
-    openPopupEl.style.top = window.innerWidth < 640 ? '100px' : '125px';
+    openPopupEl.style.top = viewportWidth < 640 ? '100px' : '125px';
   }
   setPopupTop();
   window.addEventListener('resize', setPopupTop); // Stack below grid button
