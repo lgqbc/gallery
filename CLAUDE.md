@@ -48,9 +48,9 @@ This is a **client-side photo gallery web application** that displays images in 
 
 ### Single-File Structure
 The entire application is contained in `index.html` with three main sections:
-1. **HTML Structure** (lines 1-69): DOM layout
-2. **Inline Styles** (lines 13-18): Custom CSS overrides
-3. **JavaScript** (lines 70-246): All application logic
+1. **HTML Structure** (lines 1-81): DOM layout
+2. **Inline Styles** (lines 13-23): Custom CSS overrides including SVG icon filters
+3. **JavaScript** (lines 83-377): All application logic
 
 ### Key Components
 
@@ -88,6 +88,25 @@ preloadImage(images[current - 1].url);  // Previous image
 4. Dot indicators (click to jump)
 5. Keyboard (not currently implemented)
 
+### Dynamic UI Positioning System
+A sophisticated positioning system (`positionElements()` function) automatically positions all UI elements relative to the displayed image:
+
+**Positioning Strategy:**
+- **Arrows**: Vertically centered with the image; horizontally positioned in margin space or at screen edges
+- **Buttons**: Fixed vertical position at top; horizontal positioning follows same logic as arrows
+- **Dots**: Positioned 10px below the bottom of the image, horizontally centered
+- **Responsive Offsets**:
+  - Mobile (<640px): Fixed distance from screen edges
+  - Medium (640-1024px): 15px inward offset for arrows, 20px for buttons
+  - Desktop (>1024px): Centered in margin space with no offset
+
+**Transform-based Centering:**
+- Left-positioned elements: `translateX(-50%)`
+- Right-positioned elements: `translateX(+50%)`
+- Ensures pixel-perfect centering regardless of element size
+
+This system ensures UI elements never overlap the image and always appear in optimal positions regardless of image aspect ratio or screen size.
+
 ---
 
 ## Development Workflows
@@ -103,20 +122,35 @@ All code is in `index.html`. Key areas:
 
 #### Styling Changes
 - Line 11: TailwindCSS theme configuration
-- Lines 13-18: Custom CSS overrides
+- Lines 13-23: Custom CSS overrides
+  - Lines 14-16: Hover state adjustments for touch devices
+  - Line 17: Prevent horizontal overflow
+  - Lines 19-22: SVG icon color filters (makes icons white)
 - Inline classes: TailwindCSS utility classes throughout HTML
 
 #### Layout/UI Changes
-- Lines 22-43: Fullscreen viewer structure
-- Lines 46-49: Grid view structure
-- Lines 52-68: Welcome popup content
+- Lines 27-56: Fullscreen viewer structure
+  - Image display with navigation arrows and buttons
+  - Clickable left/right areas for navigation
+  - Dots bar for pagination
+- Lines 59-62: Grid view structure
+- Lines 64-81: Welcome popup content
 
 #### JavaScript Logic
-- Lines 93-119: Image loading from GitHub API
-- Lines 121-157: Render function (updates UI)
-- Lines 159-166: Navigation state management
-- Lines 168-204: Touch gesture handlers
-- Lines 208-242: Event listeners
+- Lines 86-104: Welcome popup management
+- Lines 106-132: Image loading from GitHub API (with 500ms delay and error handling)
+- Lines 110-117: Image preloading functions
+- Lines 135-239: **Dynamic element positioning system** (`positionElements()`)
+  - Calculates image bounds and positions UI elements accordingly
+  - Responsive positioning for mobile, medium, and desktop screens
+  - Centers arrows in margin space or falls back to screen edges
+  - Positions buttons and dots bar relative to image
+  - Uses CSS transforms for precise centering
+- Lines 241-284: Render function (updates UI for fullscreen and grid views)
+- Lines 286-292: `setCurrent()` function for navigation state management
+- Lines 294-330: Touch gesture handlers for mobile swipe navigation
+- Lines 334-366: Event listeners for navigation and view switching
+- Lines 368-375: Image loading initialization and window resize handler
 
 ### Content Security Policy
 Line 6 defines CSP rules:
@@ -159,9 +193,10 @@ content="default-src 'self';
 4. Scale adjustments for different screen sizes
 
 ### Performance
-1. **Preload adjacent images** for smooth navigation
-2. **500ms delay** before API call (line 107) - prevents rate limiting
+1. **Preload adjacent images** for smooth navigation (lines 110-117)
+2. **500ms delay** before API call (line 120) - prevents rate limiting
 3. **Lazy render**: Only render visible view (fullscreen OR grid)
+4. **Dynamic positioning**: UI elements reposition on window resize for optimal layout
 
 ### Git Workflow
 - **Branch naming**: `claude/claude-md-*` for AI assistant work
@@ -198,8 +233,8 @@ content="default-src 'self';
 
 ### Task: Modify Image Loading
 1. **Understand** GitHub API rate limits
-2. **Maintain** error handling (line 116-118)
-3. **Keep** preloading strategy
+2. **Maintain** error handling (lines 129-131)
+3. **Keep** preloading strategy (lines 110-117)
 4. **Test** with slow network conditions
 5. **Update** CSP if fetching from new domains
 
@@ -330,5 +365,5 @@ This is a personal project focused on simplicity and aesthetic presentation.
 
 ---
 
-*Last Updated: 2025-12-01*
-*Generated by Claude for AI-assisted development*
+*Last Updated: 2025-12-02*
+*Maintained by Claude for AI-assisted development*
