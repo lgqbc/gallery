@@ -342,6 +342,13 @@ function toggleView() {
 document.getElementById('gridBtn').onclick = toggleView;
 document.getElementById('closeGrid').onclick = toggleView;
 
+// Close grid when clicking blank space
+document.getElementById('grid').onclick = (e) => {
+  if (e.target.id === 'grid' || e.target.id === 'gridContainer') {
+    toggleView();
+  }
+};
+
 // Touch gestures
 let touchStart = null;
 
