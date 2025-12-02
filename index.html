@@ -140,6 +140,9 @@ function positionElements() {
   const openPopupEl = document.getElementById('openPopup');
   const dotsBarEl = document.getElementById('dotsBar');
 
+  // Force a reflow to ensure we get accurate measurements
+  void imgEl.offsetHeight;
+
   // FIXED: Always use landscape aspect ratio (3072/2304) for UI positioning
   const LANDSCAPE_RATIO = 3072 / 2304; // 1.333...
 
@@ -311,11 +314,13 @@ function render() {
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
-    // Position elements after image loads
-    imgEl.onload = positionElements;
+    // Position elements after image loads (with rAF to ensure layout is complete)
+    imgEl.onload = () => {
+      requestAnimationFrame(positionElements);
+    };
     // Also position immediately in case image is cached
     if (imgEl.complete && imgEl.naturalHeight !== 0) {
-      positionElements();
+      requestAnimationFrame(positionElements);
     }
 
     // Update dots
@@ -425,7 +430,7 @@ fs.addEventListener('touchend', () => {
   // Reposition elements on window resize
   window.addEventListener('resize', () => {
     if (document.getElementById('fullscreen').classList.contains('flex')) {
-      positionElements();
+      requestAnimationFrame(positionElements);
     }
   });
 
