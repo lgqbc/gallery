@@ -84,7 +84,9 @@
     <p class="mb-2 sm:mb-4 italic">you found my gallery. how did you end up here?
       <br><br>all photos are unedited - as shot - on a 2004 digicam.</p>
     <p class="italic text-gray-600">bofu/2026</p>
-    <p class="mb-1 italic text-gray-600 text-sm">contact: lukas.gilow@gmail.com</p>
+    <p class="mb-1 italic text-gray-600 text-sm">
+      <span id="contactToggle" class="font-semibold cursor-pointer hover:text-gray-400">Contact</span>
+    </p>
     <br>
     <div class="w-full flex justify-center">
       <button id="closePopup"
@@ -107,6 +109,13 @@ document.getElementById("closePopup").onclick = () => {
 };
 
 document.getElementById("openPopup").onclick = () => popup.classList.remove("hidden");
+
+// Contact toggle
+document.getElementById("contactToggle").onclick = function() {
+  this.textContent = this.textContent === "Contact"
+    ? "gallery@bofu.simplelogin.com"
+    : "Contact";
+};
 
 // State
 let images = [], current = 0, loadingImage = null;
