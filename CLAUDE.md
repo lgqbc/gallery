@@ -48,9 +48,9 @@ This is a **client-side photo gallery web application** that displays images in 
 
 ### Single-File Structure
 The entire application is contained in `index.html` with three main sections:
-1. **HTML Structure** (lines 1-81): DOM layout
-2. **Inline Styles** (lines 13-23): Custom CSS overrides including SVG icon filters
-3. **JavaScript** (lines 83-377): All application logic
+1. **HTML Structure** (lines 1-92): DOM layout
+2. **Inline Styles** (lines 11-30): Custom CSS overrides including SVG icon filters
+3. **JavaScript** (lines 94-327): All application logic
 
 ### Key Components
 
@@ -121,36 +121,36 @@ This system ensures UI elements never overlap the image and always appear in opt
 All code is in `index.html`. Key areas:
 
 #### Styling Changes
-- Line 11: TailwindCSS theme configuration
-- Lines 13-23: Custom CSS overrides
-  - Lines 14-16: Hover state adjustments for touch devices
-  - Line 17: Prevent horizontal overflow
-  - Lines 19-22: SVG icon color filters (makes icons white)
+- Line 9: TailwindCSS theme configuration
+- Lines 11-30: Custom CSS overrides
+  - Lines 12-14: Hover state adjustments for touch devices
+  - Lines 16-23: Touch device arrow opacity fixes
+  - Line 25: Prevent horizontal overflow
+  - Lines 27-29: SVG icon color filters (makes icons white)
 - Inline classes: TailwindCSS utility classes throughout HTML
 
 #### Layout/UI Changes
-- Lines 27-56: Fullscreen viewer structure
+- Lines 34-57: Fullscreen viewer structure (flat, no nested container)
   - Image display with navigation arrows and buttons
   - Clickable left/right areas for navigation
   - Dots bar for pagination
 - Lines 59-62: Grid view structure
-- Lines 64-81: Welcome popup content
+- Lines 64-92: Welcome popup content
 
 #### JavaScript Logic
-- Lines 86-104: Welcome popup management
-- Lines 106-132: Image loading from GitHub API (with 500ms delay and error handling)
-- Lines 110-117: Image preloading functions
-- Lines 135-239: **Dynamic element positioning system** (`positionElements()`)
+- Lines 96-105: Welcome popup management
+- Lines 107-124: Image loading from GitHub API (with 500ms delay and error handling)
+- Lines 126-209: **Dynamic element positioning system** (`positionElements()`)
   - Calculates image bounds and positions UI elements accordingly
   - Responsive positioning for mobile, medium, and desktop screens
   - Centers arrows in margin space or falls back to screen edges
   - Positions buttons and dots bar relative to image
   - Uses CSS transforms for precise centering
-- Lines 241-284: Render function (updates UI for fullscreen and grid views)
-- Lines 286-292: `setCurrent()` function for navigation state management
-- Lines 294-330: Touch gesture handlers for mobile swipe navigation
-- Lines 334-366: Event listeners for navigation and view switching
-- Lines 368-375: Image loading initialization and window resize handler
+- Lines 211-252: Render function (updates UI for fullscreen and grid views)
+- Lines 254-283: Navigation helpers (`navigate()`, `setCurrent()`, `toggleView()`)
+- Lines 285-293: Event listeners for navigation and view switching
+- Lines 295-317: Touch gesture handlers for mobile swipe navigation
+- Lines 319-325: Image loading initialization and window resize handler
 
 ### Content Security Policy
 Line 6 defines CSP rules:
@@ -189,12 +189,12 @@ content="default-src 'self';
 ### Mobile Considerations
 1. Touch events are primary navigation on mobile
 2. Responsive breakpoints: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
-3. Opacity changes replace hover states on touch devices (lines 14-16)
+3. Opacity changes replace hover states on touch devices (lines 12-23)
 4. Scale adjustments for different screen sizes
 
 ### Performance
-1. **Preload adjacent images** for smooth navigation (lines 110-117)
-2. **500ms delay** before API call (line 120) - prevents rate limiting
+1. **Preload adjacent images** for smooth navigation (lines 221-222)
+2. **500ms delay** before API call (line 112) - prevents rate limiting
 3. **Lazy render**: Only render visible view (fullscreen OR grid)
 4. **Dynamic positioning**: UI elements reposition on window resize for optimal layout
 
