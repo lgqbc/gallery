@@ -120,6 +120,17 @@ document.getElementById("contactToggle").onclick = function() {
 // State
 let images = [], current = 0, loadingImage = null;
 
+// Helper to trigger browser bar auto-hide on mobile
+function hideMobileBrowserBar() {
+  // Only on mobile/touch devices
+  if (window.matchMedia('(pointer: coarse)').matches) {
+    // Small scroll to trigger browser UI hide
+    window.scrollTo(0, 1);
+    // Scroll back to top after a brief delay
+    setTimeout(() => window.scrollTo(0, 0), 10);
+  }
+}
+
 // Image loading
 async function loadImages() {
   await new Promise(r => setTimeout(r, 500));
@@ -285,6 +296,7 @@ function render() {
         }
       }
       reposition();
+      hideMobileBrowserBar();
     };
 
     // For cached images, trigger onload manually after a brief delay to allow UI to update
@@ -318,6 +330,7 @@ function setCurrent(i) {
   fs.classList.add('flex');
   document.getElementById('grid').classList.add('hidden');
   render();
+  hideMobileBrowserBar();
 }
 
 // View switching
