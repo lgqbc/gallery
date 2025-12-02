@@ -96,9 +96,10 @@ A sophisticated positioning system (`positionElements()` function) automatically
 - **Buttons**: Fixed vertical position at top; horizontal positioning follows same logic as arrows
 - **Dots**: Positioned 10px below the bottom of the image, horizontally centered
 - **Responsive Offsets**:
-  - Mobile (<640px): Fixed distance from screen edges
+  - Mobile (<640px OR smallest dimension <500px): 30px from screen edges to prevent cutoff
   - Medium (640-1024px): 15px inward offset for arrows, 20px for buttons
   - Desktop (>1024px): Centered in margin space with no offset
+  - **Note**: Landscape detection prevents treating wide but short viewports as desktop
 
 **Transform-based Centering:**
 - Left-positioned elements: `translateX(-50%)`
@@ -122,10 +123,11 @@ All code is in `index.html`. Key areas:
 
 #### Styling Changes
 - Line 11: TailwindCSS theme configuration
-- Lines 13-23: Custom CSS overrides
-  - Lines 14-16: Hover state adjustments for touch devices
-  - Line 17: Prevent horizontal overflow
-  - Lines 19-22: SVG icon color filters (makes icons white)
+- Lines 13-34: Custom CSS overrides
+  - Lines 14-16: Legacy hover state adjustments for touch devices
+  - Lines 18-26: **Touch device arrow fix** - Uses `@media (pointer: coarse)` to prevent stuck hover states on arrow buttons
+  - Line 28: Prevent horizontal overflow
+  - Lines 30-33: SVG icon color filters (makes icons white)
 - Inline classes: TailwindCSS utility classes throughout HTML
 
 #### Layout/UI Changes
@@ -187,10 +189,13 @@ content="default-src 'self';
 - LocalStorage for persistent user preferences
 
 ### Mobile Considerations
-1. Touch events are primary navigation on mobile
-2. Responsive breakpoints: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
-3. Opacity changes replace hover states on touch devices (lines 14-16)
-4. Scale adjustments for different screen sizes
+1. **Touch events** are primary navigation on mobile
+2. **Responsive breakpoints**: `sm:`, `md:`, `lg:`, `xl:`, `2xl:`
+3. **Arrow buttons** use `<button>` elements (lines 34-39) for proper touch handling
+4. **Hover state fix**: CSS `@media (pointer: coarse)` prevents stuck hover on arrows after tap (lines 18-26)
+5. **Landscape detection**: Mobile detection uses smallest viewport dimension (<500px) OR width (<640px) to handle landscape orientation
+6. **Arrow positioning**: Mobile arrows positioned 30px from screen edges to prevent cutoff with transform centering
+7. **Scale adjustments**: Different UI scales for mobile vs desktop (dots bar, buttons)
 
 ### Performance
 1. **Preload adjacent images** for smooth navigation (lines 110-117)
