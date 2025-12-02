@@ -166,8 +166,19 @@ function positionElements() {
   // Calculate hypothetical position (centered)
   const hypotheticalLeft = (viewportWidth - hypotheticalWidth) / 2;
   const hypotheticalTop = (viewportHeight - hypotheticalHeight) / 2;
-  const hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
-  const hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
+  let hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
+  let hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
+
+  // Constrain bounds to ensure UI elements fit within viewport
+  const MIN_RIGHT_SPACE = 80; // minimum space for buttons (accounting for button width + transform)
+  const MIN_BOTTOM_SPACE = 60; // minimum space for dots bar
+
+  hypotheticalRight = Math.min(hypotheticalRight, viewportWidth - MIN_RIGHT_SPACE);
+  hypotheticalBottom = Math.min(hypotheticalBottom, viewportHeight - MIN_BOTTOM_SPACE);
+
+  // Recalculate width/height after clamping
+  const clampedWidth = hypotheticalRight - hypotheticalLeft;
+  const clampedHeight = hypotheticalBottom - hypotheticalTop;
 
   // Use hypothetical bounds for positioning (as if image were always landscape)
   const imgRect = {
@@ -175,8 +186,8 @@ function positionElements() {
     right: hypotheticalRight,
     top: hypotheticalTop,
     bottom: hypotheticalBottom,
-    width: hypotheticalWidth,
-    height: hypotheticalHeight
+    width: clampedWidth,
+    height: clampedHeight
   };
 
   // Calculate space on each side
