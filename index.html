@@ -222,7 +222,6 @@ function positionElements() {
   dotsBarEl.style.left = `${dotsX}px`;
 
   // Apply scale based on viewport width (mobile vs desktop)
-  const isMobile = window.innerWidth < 640; // sm breakpoint
   const scaleValue = isMobile ? 0.6 : 1;
   dotsBarEl.style.transform = `translateX(-50%) scale(${scaleValue})`;
 }
