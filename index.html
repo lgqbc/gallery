@@ -191,8 +191,9 @@ function positionElements() {
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
-  // === ARROWS: Vertically center with image ===
-  const verticalCenter = imgRect.top + (imgRect.height / 2);
+  // === ARROWS: Vertically center with ACTUAL image (not hypothetical bounds) ===
+  const actualImgRect = imgEl.getBoundingClientRect();
+  const verticalCenter = actualImgRect.top + (actualImgRect.height / 2);
   prevEl.style.top = `${verticalCenter}px`;
   nextEl.style.top = `${verticalCenter}px`;
 
@@ -268,8 +269,7 @@ function positionElements() {
   }
 
   // === DOTS BAR: Smart positioning based on available space ===
-  // Use actual image bounds for both vertical and horizontal positioning
-  const actualImgRect = imgEl.getBoundingClientRect();
+  // Use actual image bounds for both vertical and horizontal positioning (already declared above)
   const spaceBelow = viewportHeight - actualImgRect.bottom;
   const SPACE_THRESHOLD = 10; // px threshold for "very little space"
   const INSIDE_MARGIN = 20; // margin from bottom when positioned inside image
