@@ -140,9 +140,44 @@ function positionElements() {
   const openPopupEl = document.getElementById('openPopup');
   const dotsBarEl = document.getElementById('dotsBar');
 
-  // Get image position and size
-  const imgRect = imgEl.getBoundingClientRect();
+  // FIXED: Always use landscape aspect ratio (3072/2304) for UI positioning
+  const LANDSCAPE_RATIO = 3072 / 2304; // 1.333...
+
+  // Get viewport dimensions
   const viewportWidth = window.innerWidth;
+  const viewportHeight = window.innerHeight;
+
+  // Calculate hypothetical landscape image bounds
+  let hypotheticalWidth, hypotheticalHeight;
+
+  // Check which dimension constrains the image (respecting max-height constraints)
+  const maxHeight = window.innerWidth >= 1536 ? viewportHeight * 0.95 : viewportHeight;
+
+  if (viewportWidth / maxHeight > LANDSCAPE_RATIO) {
+    // Height-constrained
+    hypotheticalHeight = maxHeight;
+    hypotheticalWidth = hypotheticalHeight * LANDSCAPE_RATIO;
+  } else {
+    // Width-constrained
+    hypotheticalWidth = viewportWidth;
+    hypotheticalHeight = hypotheticalWidth / LANDSCAPE_RATIO;
+  }
+
+  // Calculate hypothetical position (centered)
+  const hypotheticalLeft = (viewportWidth - hypotheticalWidth) / 2;
+  const hypotheticalTop = (viewportHeight - hypotheticalHeight) / 2;
+  const hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
+  const hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
+
+  // Use hypothetical bounds for positioning (as if image were always landscape)
+  const imgRect = {
+    left: hypotheticalLeft,
+    right: hypotheticalRight,
+    top: hypotheticalTop,
+    bottom: hypotheticalBottom,
+    width: hypotheticalWidth,
+    height: hypotheticalHeight
+  };
 
   // Calculate space on each side
   const leftSpace = imgRect.left;
