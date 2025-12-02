@@ -198,33 +198,17 @@ function positionElements() {
 
 // Update dots bar with loading indicator
 function updateDots() {
-  console.log('updateDots called, loadingImage:', loadingImage, 'current:', current);
-  const html = images.map((_, i) => {
+  document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
     const active = i === current;
     const loading = i === loadingImage;
-    if (loading) {
-      console.log('Dot', i, 'should show loading indicator');
-      console.log('Generated HTML will include:', '<img src="icons/PulseDot.svg" ... >');
-    }
     return `
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
         <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        ${loading ? '<div class="absolute" style="top: -20px !important; left: -20px !important; width: 48px !important; height: 48px !important; background: red !important; border: 4px solid yellow !important; z-index: 99999 !important; border-radius: 50% !important;"></div>' : ''}
+        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" style="position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important; width: 32px !important; height: 32px !important; filter: brightness(0) invert(1) !important; z-index: 99999 !important; pointer-events: none !important;">' : ''}
       </div>
     `;
   }).join('');
-  document.getElementById('dotsBar').innerHTML = html;
-  if (loadingImage !== null) {
-    console.log('DotsBar HTML:', document.getElementById('dotsBar').innerHTML.substring(0, 500));
-    // Check if img element exists
-    const loadingImgs = document.querySelectorAll('#dotsBar img[alt="Loading"]');
-    console.log('Number of loading indicators found in DOM:', loadingImgs.length);
-    if (loadingImgs.length > 0) {
-      console.log('Loading indicator element:', loadingImgs[0]);
-      console.log('Computed style:', window.getComputedStyle(loadingImgs[0]));
-    }
-  }
 }
 
 // Render current state
@@ -256,7 +240,6 @@ function render() {
     // Position elements after image loads
     const reposition = () => requestAnimationFrame(positionElements);
     img.onload = () => {
-      console.log('Image loaded, clearing loading state');
       if (loadingImage === loadingIndex) {
         loadingImage = null;
         updateDots();
@@ -266,7 +249,6 @@ function render() {
 
     // For cached images, trigger onload manually after a brief delay to allow UI to update
     if (img.complete && img.naturalHeight !== 0) {
-      console.log('Image already complete, triggering onload');
       setTimeout(() => img.onload(), 0);
     }
   } else {
