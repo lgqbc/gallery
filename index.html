@@ -192,7 +192,11 @@ function positionElements() {
 
   // === BUTTONS: Fixed vertical positions at top, horizontal positioning like right arrow ===
   gridBtnEl.style.top = '24px';
-  openPopupEl.style.top = '100px'; // Stack below grid button
+  function setPopupTop() {
+    openPopupEl.style.top = window.innerWidth < 640 ? '100px' : '125px';
+  }
+  setPopupTop();
+  window.addEventListener('resize', setPopupTop); // Stack below grid button
 
   // Use same transform as arrows (right-positioned elements need +50%)
   gridBtnEl.style.transform = 'translateX(50%)';
