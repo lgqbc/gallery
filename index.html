@@ -202,16 +202,22 @@ function updateDots() {
   const html = images.map((_, i) => {
     const active = i === current;
     const loading = i === loadingImage;
-    if (loading) console.log('Dot', i, 'should show loading indicator');
+    if (loading) {
+      console.log('Dot', i, 'should show loading indicator');
+      console.log('Generated HTML will include:', '<img src="icons/PulseDot.svg" ... >');
+    }
     return `
       <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
         <div class="absolute inset-[-7px]"></div>
         <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" style="filter: brightness(0) invert(1);">' : ''}
+        ${loading ? '<img src="icons/PulseDot.svg" alt="Loading" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 pointer-events-none" style="filter: brightness(0) invert(1); background: red; z-index: 9999;">' : ''}
       </div>
     `;
   }).join('');
   document.getElementById('dotsBar').innerHTML = html;
+  if (loadingImage !== null) {
+    console.log('DotsBar HTML:', document.getElementById('dotsBar').innerHTML.substring(0, 500));
+  }
 }
 
 // Render current state
