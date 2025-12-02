@@ -27,6 +27,22 @@
     #prev img, #next img, #gridBtn img, #openPopup img {
       filter: brightness(0) invert(1);
     }
+
+    @keyframes pulse-ring {
+      0% {
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+      }
+    }
+
+    .loading-pulse {
+      animation: pulse-ring 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite 0.25s;
+      opacity: 0;
+    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -93,7 +109,7 @@ document.getElementById("closePopup").onclick = () => {
 document.getElementById("openPopup").onclick = () => popup.classList.remove("hidden");
 
 // State
-let images = [], current = 0;
+let images = [], current = 0, loadingImage = null;
 
 // Image loading
 async function loadImages() {
@@ -196,39 +212,61 @@ function positionElements() {
   dotsBar.style.transform = `translateX(-50%) scale(${isMobile ? 0.6 : 1})`;
 }
 
+// Update dots bar with loading indicator
+function updateDots() {
+  document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
+    const active = i === current;
+    const loading = i === loadingImage;
+    return `
+      <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
+        <div class="absolute inset-[-7px]"></div>
+        <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
+        ${loading ? '<div class="loading-pulse" style="position: absolute !important; top: 50% !important; left: 50% !important; width: 32px !important; height: 32px !important; border: 2px solid white !important; border-radius: 50% !important; z-index: 99999 !important; pointer-events: none !important;"></div>' : ''}
+      </div>
+    `;
+  }).join('');
+}
+
 // Render current state
 function render() {
   const fs = document.getElementById('fullscreen');
   const img = document.getElementById('image');
   const isFullscreen = fs.classList.contains('flex');
 
-  img.src = images[current].url;
-
   if (isFullscreen) {
-    // Preload adjacent images
-    if (current > 0) new Image().src = images[current - 1].url;
-    if (current < images.length - 1) new Image().src = images[current + 1].url;
+    // Track which image is loading
+    const loadingIndex = current; // Capture for closure
+    loadingImage = current;
+
+    // Update dots to show loading state
+    updateDots();
 
     // Update UI
     document.getElementById('title').textContent = images[current].name.startsWith("DSC") ? "" : images[current].name;
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
+    // Set image source
+    img.src = images[current].url;
+
+    // Preload adjacent images
+    if (current > 0) new Image().src = images[current - 1].url;
+    if (current < images.length - 1) new Image().src = images[current + 1].url;
+
     // Position elements after image loads
     const reposition = () => requestAnimationFrame(positionElements);
-    img.onload = reposition;
-    if (img.complete && img.naturalHeight !== 0) reposition();
+    img.onload = () => {
+      if (loadingImage === loadingIndex) {
+        loadingImage = null;
+        updateDots();
+      }
+      reposition();
+    };
 
-    // Update dots
-    document.getElementById('dotsBar').innerHTML = images.map((_, i) => {
-      const active = i === current;
-      return `
-        <div class="relative cursor-pointer ${active ? '' : 'group'}" onclick="setCurrent(${i})">
-          <div class="absolute inset-[-7px]"></div>
-          <div class="w-2 h-2 bg-slate-300 rounded-full ${active ? 'opacity-[1]' : 'opacity-[0.25] group-hover:opacity-[.65]'}"></div>
-        </div>
-      `;
-    }).join('');
+    // For cached images, trigger onload manually after a brief delay to allow UI to update
+    if (img.complete && img.naturalHeight !== 0) {
+      setTimeout(() => img.onload(), 0);
+    }
   } else {
     // Grid view
     document.getElementById('gridContainer').innerHTML = images.map((img, i) =>
