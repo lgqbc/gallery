@@ -66,7 +66,7 @@
     <img src="icons/openPopup.svg" alt="Info" class="w-12 h-12 md:w-16 md:h-16">
   </button>
 
-  <div id="dotsBar" class="fixed flex gap-3 z-10 scale-[60%] md:scale-100"></div>
+  <div id="dotsBar" class="fixed flex flex-wrap justify-center gap-x-3 gap-y-2 z-10" style="max-width: min(90vw, 1000px);"></div>
 
   <div id="prev-area" class="absolute top-0 left-0 bottom-36 sm:bottom-6 w-1/2 cursor-pointer -z-2"></div>
   <div id="next-area" class="absolute top-0 right-0 bottom-36 sm:bottom-6 w-1/2 cursor-pointer -z-2"></div>
@@ -218,7 +218,7 @@ function positionElements() {
 
   dotsBar.style.top = `${dotsY}px`;
   dotsBar.style.left = `${dotsX}px`;
-  dotsBar.style.transform = `translateX(-50%) scale(${isMobile ? 0.6 : 1})`;
+  dotsBar.style.transform = 'translateX(-50%)';
 }
 
 // Update dots bar with loading indicator
