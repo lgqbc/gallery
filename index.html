@@ -271,19 +271,22 @@ function positionElements() {
   }
 
   // === DOTS BAR: Smart positioning based on available space ===
-  const spaceBelow = viewportHeight - imgRect.bottom;
+  // Use actual image bounds for vertical positioning (not hypothetical)
+  const actualImgRect = imgEl.getBoundingClientRect();
+  const spaceBelow = viewportHeight - actualImgRect.bottom;
   const SPACE_THRESHOLD = 10; // px threshold for "very little space"
   const INSIDE_MARGIN = 20; // margin from bottom when positioned inside image
 
   let dotsY;
   if (spaceBelow > SPACE_THRESHOLD) {
-    // Center in the blank space below image
-    dotsY = imgRect.bottom + (spaceBelow / 2);
+    // Center in the blank space below actual image
+    dotsY = actualImgRect.bottom + (spaceBelow / 2);
   } else {
-    // Stick to inside bottom of image with margin
-    dotsY = imgRect.bottom - INSIDE_MARGIN;
+    // Stick to inside bottom of actual image with margin
+    dotsY = actualImgRect.bottom - INSIDE_MARGIN;
   }
 
+  // Use hypothetical bounds for horizontal centering (landscape-oriented)
   const dotsX = imgRect.left + (imgRect.width / 2);
   dotsBarEl.style.top = `${dotsY}px`;
   dotsBarEl.style.left = `${dotsX}px`;
