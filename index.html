@@ -11,8 +11,14 @@
   <script>tailwind.config={theme:{extend:{colors:{coal:"#111111"}}}};</script>
 
   <style>
+    /* Disable all hover states on touch devices to prevent stuck hover after tap */
     @media (hover: none) {
-      .hover\:opacity-100 { opacity: 0.6 !important; }
+      .hover\:opacity-40,
+      .hover\:opacity-70,
+      .hover\:opacity-80,
+      .hover\:opacity-100 {
+        opacity: inherit !important;
+      }
     }
     html, body {overflow-x: hidden;}
 
@@ -189,8 +195,13 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
-  const isMobile = viewportWidth < 640; // sm breakpoint
-  const isMedium = viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
+
+  // Improved mobile detection: consider both dimensions and touch capability
+  // This handles landscape orientation on mobile devices properly
+  const smallestDimension = Math.min(viewportWidth, viewportHeight);
+  const isMobile = viewportWidth < 640 || smallestDimension < 500;
+  const isMedium = !isMobile && viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
+
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
