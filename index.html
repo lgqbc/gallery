@@ -143,15 +143,15 @@ function positionElements() {
   // FIXED: Always use landscape aspect ratio (3072/2304) for UI positioning
   const LANDSCAPE_RATIO = 3072 / 2304; // 1.333...
 
-  // Get viewport dimensions
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
+  // Get viewport dimensions (excluding scrollbars)
+  const viewportWidth = document.documentElement.clientWidth;
+  const viewportHeight = document.documentElement.clientHeight;
 
   // Calculate hypothetical landscape image bounds
   let hypotheticalWidth, hypotheticalHeight;
 
   // Check which dimension constrains the image (respecting max-height constraints)
-  const maxHeight = window.innerWidth >= 1536 ? viewportHeight * 0.95 : viewportHeight;
+  const maxHeight = viewportWidth >= 1536 ? viewportHeight * 0.95 : viewportHeight;
 
   if (viewportWidth / maxHeight > LANDSCAPE_RATIO) {
     // Height-constrained
@@ -166,16 +166,8 @@ function positionElements() {
   // Calculate hypothetical position (centered)
   const hypotheticalLeft = (viewportWidth - hypotheticalWidth) / 2;
   const hypotheticalTop = (viewportHeight - hypotheticalHeight) / 2;
-  let hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
-  let hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
-
-  // Constrain right edge to ensure buttons fit within viewport
-  const MIN_RIGHT_SPACE = 80; // minimum space for buttons (accounting for button width + transform)
-  hypotheticalRight = Math.min(hypotheticalRight, viewportWidth - MIN_RIGHT_SPACE);
-
-  // Recalculate width after clamping
-  const clampedWidth = hypotheticalRight - hypotheticalLeft;
-  const clampedHeight = hypotheticalHeight;
+  const hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
+  const hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
 
   // Use hypothetical bounds for positioning (as if image were always landscape)
   const imgRect = {
@@ -183,8 +175,8 @@ function positionElements() {
     right: hypotheticalRight,
     top: hypotheticalTop,
     bottom: hypotheticalBottom,
-    width: clampedWidth,
-    height: clampedHeight
+    width: hypotheticalWidth,
+    height: hypotheticalHeight
   };
 
   // Calculate space on each side
@@ -194,8 +186,8 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
-  const isMobile = window.innerWidth < 640; // sm breakpoint
-  const isMedium = window.innerWidth >= 640 && window.innerWidth < 1024; // md breakpoint
+  const isMobile = viewportWidth < 640; // sm breakpoint
+  const isMedium = viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
@@ -236,7 +228,7 @@ function positionElements() {
   // === BUTTONS: Fixed vertical positions at top, horizontal positioning like right arrow ===
   gridBtnEl.style.top = '24px';
   function setPopupTop() {
-    openPopupEl.style.top = window.innerWidth < 640 ? '100px' : '125px';
+    openPopupEl.style.top = viewportWidth < 640 ? '100px' : '125px';
   }
   setPopupTop();
   window.addEventListener('resize', setPopupTop); // Stack below grid button
@@ -248,24 +240,29 @@ function positionElements() {
   // Horizontal positioning - same logic as right arrow
   // Apply inward offset on mobile and tablet only
   const buttonOffset = (isMobile || isMedium) ? BUTTON_INWARD_OFFSET : 0;
+  // Minimum safe distance accounting for button width (64px) + transform (50% = 32px)
+  const MIN_BUTTON_SAFE_DISTANCE = 40;
 
   if (isMobile) {
     // Mobile: fixed distance from screen edge with inward offset
-    gridBtnEl.style.right = `${FALLBACK_DISTANCE + buttonOffset}px`;
+    const mobilePos = Math.max(FALLBACK_DISTANCE + buttonOffset, MIN_BUTTON_SAFE_DISTANCE);
+    gridBtnEl.style.right = `${mobilePos}px`;
     gridBtnEl.style.left = 'auto';
-    openPopupEl.style.right = `${FALLBACK_DISTANCE + buttonOffset}px`;
+    openPopupEl.style.right = `${mobilePos}px`;
     openPopupEl.style.left = 'auto';
   } else {
     // Desktop/Medium: center in margin space with offset, or fallback if not enough space
     if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-      gridBtnEl.style.right = `${(rightSpace / 2) + buttonOffset}px`;
+      const centeredPos = Math.max((rightSpace / 2) + buttonOffset, MIN_BUTTON_SAFE_DISTANCE);
+      gridBtnEl.style.right = `${centeredPos}px`;
       gridBtnEl.style.left = 'auto';
-      openPopupEl.style.right = `${(rightSpace / 2) + buttonOffset}px`;
+      openPopupEl.style.right = `${centeredPos}px`;
       openPopupEl.style.left = 'auto';
     } else {
-      gridBtnEl.style.right = `${FALLBACK_DISTANCE + buttonOffset}px`;
+      const fallbackPos = Math.max(FALLBACK_DISTANCE + buttonOffset, MIN_BUTTON_SAFE_DISTANCE);
+      gridBtnEl.style.right = `${fallbackPos}px`;
       gridBtnEl.style.left = 'auto';
-      openPopupEl.style.right = `${FALLBACK_DISTANCE + buttonOffset}px`;
+      openPopupEl.style.right = `${fallbackPos}px`;
       openPopupEl.style.left = 'auto';
     }
   }
