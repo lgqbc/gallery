@@ -43,6 +43,25 @@
       animation: pulse-ring 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite 0.4s;
       opacity: 0;
     }
+
+    @keyframes slide-left {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(-30px); opacity: 0; }
+    }
+
+    @keyframes slide-right {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(30px); opacity: 0; }
+    }
+
+    @keyframes slide-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #image.swipe-left { animation: slide-left 0.15s ease-out; }
+    #image.swipe-right { animation: slide-right 0.15s ease-out; }
+    #image.swipe-in { animation: slide-in 0.15s ease-out; }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -313,8 +332,24 @@ function render() {
 function navigate(delta) {
   const next = current + delta;
   if (next >= 0 && next < images.length) {
-    current = next;
-    render();
+    const img = document.getElementById('image');
+
+    // Apply swipe-out animation
+    img.className = img.className.replace(/swipe-\w+/g, '').trim();
+    img.classList.add(delta > 0 ? 'swipe-left' : 'swipe-right');
+
+    // Change image after brief delay, then apply swipe-in
+    setTimeout(() => {
+      current = next;
+      img.className = img.className.replace(/swipe-\w+/g, '').trim();
+      img.classList.add('swipe-in');
+      render();
+
+      // Clean up animation class
+      setTimeout(() => {
+        img.className = img.className.replace(/swipe-\w+/g, '').trim();
+      }, 150);
+    }, 150);
   }
 }
 
