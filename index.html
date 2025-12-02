@@ -46,22 +46,22 @@
 
     @keyframes slide-left {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(-30px); opacity: 0; }
+      to { transform: translateX(-20px); opacity: 0.5; }
     }
 
     @keyframes slide-right {
       from { transform: translateX(0); opacity: 1; }
-      to { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(20px); opacity: 0.5; }
     }
 
     @keyframes slide-in {
-      from { opacity: 0; }
+      from { opacity: 0.5; }
       to { opacity: 1; }
     }
 
-    #image.swipe-left { animation: slide-left 0.15s ease-out; }
-    #image.swipe-right { animation: slide-right 0.15s ease-out; }
-    #image.swipe-in { animation: slide-in 0.15s ease-out; }
+    #image.swipe-left { animation: slide-left 0.1s ease-out; }
+    #image.swipe-right { animation: slide-right 0.1s ease-out; }
+    #image.swipe-in { animation: slide-in 0.1s ease-out; }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -348,8 +348,8 @@ function navigate(delta) {
       // Clean up animation class
       setTimeout(() => {
         img.className = img.className.replace(/swipe-\w+/g, '').trim();
-      }, 150);
-    }, 150);
+      }, 100);
+    }, 100);
   }
 }
 
