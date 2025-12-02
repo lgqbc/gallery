@@ -151,7 +151,6 @@ function positionElements() {
 
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge
-  const DESKTOP_OFFSET = 30; // px to shift buttons right on desktop
   const isMobile = window.innerWidth < 640; // sm breakpoint
 
   // === ARROWS: Vertically center with image ===
@@ -161,7 +160,7 @@ function positionElements() {
 
   // Use transform to center the arrows on the calculated position
   prevEl.style.transform = 'translate(-50%, -50%)';
-  nextEl.style.transform = 'translate(-50%, -50%)';
+  nextEl.style.transform = 'translate(50%, -50%)'; // +50% for right-positioned element
 
   // Position arrows
   if (isMobile) {
@@ -170,18 +169,18 @@ function positionElements() {
     nextEl.style.right = `${FALLBACK_DISTANCE}px`;
     nextEl.style.left = 'auto';
   } else {
-    // Desktop: center in margin space with offset, or fallback if not enough space
+    // Desktop: center in margin space, or fallback if not enough space
     if (leftSpace >= MIN_SPACE_FOR_CENTERING) {
-      prevEl.style.left = `${(leftSpace / 2) + DESKTOP_OFFSET}px`;
+      prevEl.style.left = `${leftSpace / 2}px`;
     } else {
-      prevEl.style.left = `${FALLBACK_DISTANCE + DESKTOP_OFFSET}px`;
+      prevEl.style.left = `${FALLBACK_DISTANCE}px`;
     }
 
     if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-      nextEl.style.right = `${(rightSpace / 2) - DESKTOP_OFFSET}px`;
+      nextEl.style.right = `${rightSpace / 2}px`;
       nextEl.style.left = 'auto';
     } else {
-      nextEl.style.right = `${Math.max(FALLBACK_DISTANCE - DESKTOP_OFFSET, FALLBACK_DISTANCE)}px`;
+      nextEl.style.right = `${FALLBACK_DISTANCE}px`;
       nextEl.style.left = 'auto';
     }
   }
@@ -190,9 +189,9 @@ function positionElements() {
   gridBtnEl.style.top = '24px';
   openPopupEl.style.top = '100px'; // Stack below grid button
 
-  // Use same transform as arrows
-  gridBtnEl.style.transform = 'translateX(-50%)';
-  openPopupEl.style.transform = 'translateX(-50%)';
+  // Use same transform as arrows (right-positioned elements need +50%)
+  gridBtnEl.style.transform = 'translateX(50%)';
+  openPopupEl.style.transform = 'translateX(50%)';
 
   // Horizontal positioning - same logic as right arrow
   if (isMobile) {
@@ -202,16 +201,16 @@ function positionElements() {
     openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
     openPopupEl.style.left = 'auto';
   } else {
-    // Desktop: center in margin space with offset, or fallback if not enough space
+    // Desktop: center in margin space, or fallback if not enough space
     if (rightSpace >= MIN_SPACE_FOR_CENTERING) {
-      gridBtnEl.style.right = `${(rightSpace / 2) - DESKTOP_OFFSET}px`;
+      gridBtnEl.style.right = `${rightSpace / 2}px`;
       gridBtnEl.style.left = 'auto';
-      openPopupEl.style.right = `${(rightSpace / 2) - DESKTOP_OFFSET}px`;
+      openPopupEl.style.right = `${rightSpace / 2}px`;
       openPopupEl.style.left = 'auto';
     } else {
-      gridBtnEl.style.right = `${Math.max(FALLBACK_DISTANCE - DESKTOP_OFFSET, FALLBACK_DISTANCE)}px`;
+      gridBtnEl.style.right = `${FALLBACK_DISTANCE}px`;
       gridBtnEl.style.left = 'auto';
-      openPopupEl.style.right = `${Math.max(FALLBACK_DISTANCE - DESKTOP_OFFSET, FALLBACK_DISTANCE)}px`;
+      openPopupEl.style.right = `${FALLBACK_DISTANCE}px`;
       openPopupEl.style.left = 'auto';
     }
   }
