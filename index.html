@@ -42,12 +42,12 @@
     <img id="image" class="rounded-md
       max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] 
       object-contain" src="" alt="">
-    <div id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed cursor-pointer z-50">
+    <button id="prev" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed cursor-pointer z-50 p-0 bg-transparent border-0">
       <img src="icons/prev.svg" alt="Previous" class="w-12 h-12 sm:w-20 sm:h-20">
-    </div>
-    <div id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed cursor-pointer z-50">
+    </button>
+    <button id="next" class="text-white opacity-25 hover:opacity-40 active:opacity-40 fixed cursor-pointer z-50 p-0 bg-transparent border-0">
       <img src="icons/next.svg" alt="Next" class="w-12 h-12 sm:w-20 sm:h-20">
-    </div>
+    </button>
   </div>
   
   <button id="gridBtn" class="fixed px-3 py-2 opacity-50 hover:opacity-70 active:opacity-70 z-10">
@@ -201,13 +201,14 @@ function positionElements() {
   const MIN_SPACE_FOR_CENTERING = 24; // 2 * 12px
   const FALLBACK_DISTANCE = 12; // px from screen edge (desktop)
 
-  // Improved mobile detection for landscape orientation
+  // Improved mobile detection: consider both dimensions and touch capability
+  // This handles landscape orientation on mobile devices properly
   const smallestDimension = Math.min(viewportWidth, viewportHeight);
   const isMobile = viewportWidth < 640 || smallestDimension < 500;
   const isMedium = !isMobile && viewportWidth >= 640 && viewportWidth < 1024; // md breakpoint
 
-  // Mobile needs more space: 48px arrow / 2 (transform) + margin = ~30px
-  const MOBILE_ARROW_OFFSET = 30; // px from screen edge on mobile
+  // Mobile arrows need more space because of transform centering (48px arrow / 2 = 24px + margin)
+  const MOBILE_ARROW_DISTANCE = 30; // px from screen edge (accounts for arrow size + transform)
   const ARROW_INWARD_OFFSET_MEDIUM = 15; // px to shift arrows inward on medium screens
   const BUTTON_INWARD_OFFSET = 20; // px to shift menu buttons inward on mobile/tablet
 
@@ -223,9 +224,9 @@ function positionElements() {
 
   // Position arrows
   if (isMobile) {
-    // Mobile: use larger offset to account for arrow size (48px) + transform centering
-    prevEl.style.left = `${MOBILE_ARROW_OFFSET}px`;
-    nextEl.style.right = `${MOBILE_ARROW_OFFSET}px`;
+    // Mobile: fixed distance from screen edges with extra space for arrow size + transform
+    prevEl.style.left = `${MOBILE_ARROW_DISTANCE}px`;
+    nextEl.style.right = `${MOBILE_ARROW_DISTANCE}px`;
     nextEl.style.left = 'auto';
   } else {
     // Desktop/Medium: center in margin space, or fallback if not enough space
