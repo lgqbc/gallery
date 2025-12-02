@@ -169,16 +169,13 @@ function positionElements() {
   let hypotheticalRight = hypotheticalLeft + hypotheticalWidth;
   let hypotheticalBottom = hypotheticalTop + hypotheticalHeight;
 
-  // Constrain bounds to ensure UI elements fit within viewport
+  // Constrain right edge to ensure buttons fit within viewport
   const MIN_RIGHT_SPACE = 80; // minimum space for buttons (accounting for button width + transform)
-  const MIN_BOTTOM_SPACE = 60; // minimum space for dots bar
-
   hypotheticalRight = Math.min(hypotheticalRight, viewportWidth - MIN_RIGHT_SPACE);
-  hypotheticalBottom = Math.min(hypotheticalBottom, viewportHeight - MIN_BOTTOM_SPACE);
 
-  // Recalculate width/height after clamping
+  // Recalculate width after clamping
   const clampedWidth = hypotheticalRight - hypotheticalLeft;
-  const clampedHeight = hypotheticalBottom - hypotheticalTop;
+  const clampedHeight = hypotheticalHeight;
 
   // Use hypothetical bounds for positioning (as if image were always landscape)
   const imgRect = {
@@ -273,8 +270,20 @@ function positionElements() {
     }
   }
 
-  // === DOTS BAR: Position right underneath image ===
-  const dotsY = imgRect.bottom + 10; // 10px below image
+  // === DOTS BAR: Smart positioning based on available space ===
+  const spaceBelow = viewportHeight - imgRect.bottom;
+  const SPACE_THRESHOLD = 10; // px threshold for "very little space"
+  const INSIDE_MARGIN = 20; // margin from bottom when positioned inside image
+
+  let dotsY;
+  if (spaceBelow > SPACE_THRESHOLD) {
+    // Center in the blank space below image
+    dotsY = imgRect.bottom + (spaceBelow / 2);
+  } else {
+    // Stick to inside bottom of image with margin
+    dotsY = imgRect.bottom - INSIDE_MARGIN;
+  }
+
   const dotsX = imgRect.left + (imgRect.width / 2);
   dotsBarEl.style.top = `${dotsY}px`;
   dotsBarEl.style.left = `${dotsX}px`;
