@@ -56,7 +56,7 @@ The entire application is contained in `index.html` with three main sections:
 
 #### 1. Fullscreen Viewer (`#fullscreen`)
 - Main image display with navigation arrows
-- Dot pagination indicators at bottom
+- Dot pagination indicators at bottom with loading animation (line 43: 0.4s delay, CSS keyframes)
 - Title display (hidden for DSC* filenames)
 - Click areas for prev/next navigation
 - Touch gesture support for mobile
