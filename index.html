@@ -236,6 +236,7 @@ function render() {
   if (isFullscreen) {
     // Track which image is loading
     const loadingIndex = current; // Capture for closure
+    const loadStartTime = Date.now();
     loadingImage = current;
 
     // Update dots to show loading state
@@ -257,18 +258,19 @@ function render() {
     const reposition = () => requestAnimationFrame(positionElements);
     img.onload = () => {
       if (loadingImage === loadingIndex) {
-        // Find the loading indicator and let it finish its current cycle
+        const loadTime = Date.now() - loadStartTime;
         const indicator = document.querySelector('.loading-pulse');
-        if (indicator) {
+
+        // If image loaded quickly (within animation delay period), clear immediately
+        if (loadTime < 400 || !indicator) {
+          loadingImage = null;
+          updateDots();
+        } else {
           // Wait for the current animation cycle to complete
           indicator.addEventListener('animationiteration', () => {
             loadingImage = null;
             updateDots();
           }, { once: true });
-        } else {
-          // No indicator found (likely during delay period or already finished)
-          loadingImage = null;
-          updateDots();
         }
       }
       reposition();
