@@ -60,10 +60,10 @@
   </button>
   
   <button id="gridBtn" class="fixed px-3 py-2 opacity-[24%] hover:opacity-[60%] active:opacity-[60%] z-10">
-    <img src="icons/gridBtn.svg" alt="Grid" class="w-12 h-12 md:w-16 md:h-16">
+    <img src="icons/gridBtn.svg" alt="Grid" class="w-12 h-12 md:w-16 md:h-16 transition duration-[0.45s] ease-in hover:rotate-[6.28319rad] active:rotate-[6.28319rad]">
   </button>
   <button id="openPopup" class="fixed px-3 py-2 opacity-[24%] hover:opacity-[60%] active:opacity-[60%] z-10">
-    <img src="icons/openPopup.svg" alt="Info" class="w-12 h-12 md:w-16 md:h-16">
+    <img src="icons/openPopup.svg" alt="Info" class="w-12 h-12 md:w-16 md:h-16 transition duration-[0.45s] ease-in-out hover:rotate-[6.28319rad] active:rotate-[6.28319rad]">
   </button>
 
   <div id="dotsBar" class="fixed flex flex-wrap justify-center gap-x-3 gap-y-2 z-10 opacity-[75%]"></div>
@@ -205,7 +205,7 @@ function positionElements() {
   const btnOffset = (isMobile || isMedium) ? 20 : 0;
 
   gridBtn.style.top = '24px';
-  openBtn.style.top = vw < 768 ? '84px' : '125px';
+  openBtn.style.top = vw < 768 ? '78px' : '120px';
   gridBtn.style.transform = openBtn.style.transform = 'translateX(50%)';
 
   if (isMobile) {
