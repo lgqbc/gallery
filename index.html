@@ -43,6 +43,15 @@
       animation: pulse-ring 1.2s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite 0.4s;
       opacity: 0;
     }
+
+    #grid {
+      opacity: 0;
+      transition: opacity 0.75s ease-in-out;
+    }
+
+    #grid.fade-in {
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -334,10 +343,25 @@ function toggleView() {
   const g = document.getElementById('grid');
   const showGrid = g.classList.contains('hidden');
 
-  fs.classList.toggle('hidden', showGrid);
-  fs.classList.toggle('flex', !showGrid);
-  g.classList.toggle('hidden', !showGrid);
-  render();
+  if (showGrid) {
+    // Show grid with fade-in
+    fs.classList.add('hidden');
+    fs.classList.remove('flex');
+    g.classList.remove('hidden');
+    // Force reflow to ensure transition works
+    void g.offsetWidth;
+    g.classList.add('fade-in');
+    render();
+  } else {
+    // Hide grid with fade-out
+    g.classList.remove('fade-in');
+    setTimeout(() => {
+      g.classList.add('hidden');
+      fs.classList.remove('hidden');
+      fs.classList.add('flex');
+      render();
+    }, 750); // Match transition duration
+  }
 }
 
 // Event listeners
