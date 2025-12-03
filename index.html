@@ -262,10 +262,11 @@ function updateDots() {
 // Render current state
 function render() {
   const fs = document.getElementById('fullscreen');
+  const g = document.getElementById('grid');
   const img = document.getElementById('image');
-  const isFullscreen = fs.classList.contains('flex');
+  const isGridView = !g.classList.contains('hidden');
 
-  if (isFullscreen) {
+  if (!isGridView) {
     // Track which image is loading
     const loadingIndex = current; // Capture for closure
     const loadStartTime = Date.now();
