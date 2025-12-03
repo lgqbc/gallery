@@ -52,18 +52,18 @@
 
   <img id="image" class="rounded-md max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] object-contain" src="" alt="">
 
-  <button id="prev" class="text-white opacity-[14%] hover:opacity-[60%] active:opacity-40 fixed cursor-pointer z-50 p-0 bg-transparent border-0">
-    <img src="icons/prev.svg" alt="Previous" class="w-12 h-12 md:w-20 md:h-20">
+  <button id="prev" class="text-white fixed cursor-pointer z-50 p-0 bg-transparent border-0">
+    <img src="icons/prev.svg" alt="Previous" class="w-12 h-12 md:w-20 md:h-20 opacity-[14%] transition duration-[0.75s] hover:opacity-[60%] active:opacity-40">
   </button>
-  <button id="next" class="text-white opacity-[14%] hover:opacity-[60%] active:opacity-40 fixed cursor-pointer z-50 p-0 bg-transparent border-0">
-    <img src="icons/next.svg" alt="Next" class="w-12 h-12 md:w-20 md:h-20">
+  <button id="next" class="text-white fixed cursor-pointer z-50 p-0 bg-transparent border-0">
+    <img src="icons/next.svg" alt="Next" class="w-12 h-12 md:w-20 md:h-20 opacity-[14%] transition duration-[0.75s] hover:opacity-[60%] active:opacity-40">
   </button>
   
-  <button id="gridBtn" class="fixed px-3 py-2 opacity-[24%] hover:opacity-[60%] active:opacity-[60%] z-10">
-    <img src="icons/gridBtn.svg" alt="Grid" class="w-12 h-12 md:w-16 md:h-16 transition delay-100 duration-[0.45s] ease-in hover:rotate-[6.28319rad] active:rotate-[6.28319rad]">
+  <button id="gridBtn" class="fixed px-3 py-2 z-10">
+    <img src="icons/gridBtn.svg" alt="Grid" class="w-12 h-12 md:w-16 md:h-16 opacity-[24%] transition duration-[0.75s] hover:opacity-[70%] active:opacity-[70%]">
   </button>
-  <button id="openPopup" class="fixed px-3 py-2 opacity-[24%] hover:opacity-[60%] active:opacity-[60%] z-10">
-    <img src="icons/openPopup.svg" alt="Info" class="w-12 h-12 md:w-16 md:h-16 transition delay-100 duration-[0.45s] ease-in-out hover:rotate-[6.28319rad] active:rotate-[6.28319rad]">
+  <button id="openPopup" class="fixed px-3 py-2 z-10">
+    <img src="icons/openPopup.svg" alt="Info" class="w-12 h-12 md:w-16 md:h-16 opacity-[24%] transition duration-[0.75s] hover:opacity-[70%] active:opacity-[70%]">
   </button>
 
   <div id="dotsBar" class="fixed flex flex-wrap justify-center gap-x-3 gap-y-2 z-10 opacity-[75%]"></div>
@@ -73,7 +73,7 @@
 </div>
 
 <div id="grid" class="hidden bg-coal min-h-screen px-5 md:px-12 2xl:px-24 py-5 md:py-12">
-   <button id="closeGrid" class="text-4xl sm:text-6xl absolute top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full opacity-50 hover:opacity-70 z-10 scale-150">×</button>
+   <button id="closeGrid" class="text-4xl sm:text-6xl absolute top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full z-10 scale-150 opacity-50 transition duration-[0.75s] hover:opacity-70">×</button>
   <div id="gridContainer" class="grid gap-2 md:gap-5 lg:gap-10 grid-cols-2 lg:grid-cols-3"></div>
 </div>
 
