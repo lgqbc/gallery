@@ -47,6 +47,10 @@
     #grid {
       opacity: 0;
       transition: opacity 0.75s ease-in-out;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      overflow-y: auto;
     }
 
     #grid.fade-in {
@@ -344,21 +348,25 @@ function toggleView() {
   const showGrid = g.classList.contains('hidden');
 
   if (showGrid) {
-    // Show grid with fade-in
-    fs.classList.add('hidden');
-    fs.classList.remove('flex');
+    // Show grid with fade-in (keep fullscreen visible underneath)
     g.classList.remove('hidden');
+    render(); // Render grid content
     // Force reflow to ensure transition works
     void g.offsetWidth;
     g.classList.add('fade-in');
-    render();
+    // Hide fullscreen after fade-in completes
+    setTimeout(() => {
+      fs.classList.add('hidden');
+      fs.classList.remove('flex');
+    }, 750);
   } else {
-    // Hide grid with fade-out
+    // Show fullscreen before grid fades out
+    fs.classList.remove('hidden');
+    fs.classList.add('flex');
+    // Fade out grid
     g.classList.remove('fade-in');
     setTimeout(() => {
       g.classList.add('hidden');
-      fs.classList.remove('hidden');
-      fs.classList.add('flex');
       render();
     }, 750); // Match transition duration
   }
