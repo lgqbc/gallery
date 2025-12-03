@@ -381,6 +381,29 @@ document.getElementById('fullscreen').addEventListener('touchend', () => {
   touchStart = null;
 });
 
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  // Prevent default behavior for arrow keys
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+    e.preventDefault();
+  }
+
+  switch(e.key) {
+    case 'ArrowLeft':
+      navigate(-1);
+      break;
+    case 'ArrowRight':
+      navigate(1);
+      break;
+    case 'ArrowUp':
+      toggleView();
+      break;
+    case 'ArrowDown':
+      popup.classList.remove('hidden');
+      break;
+  }
+});
+
 // Initialize
 loadImages();
 window.addEventListener('resize', () => {
