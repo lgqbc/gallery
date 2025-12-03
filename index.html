@@ -56,6 +56,24 @@
     #grid.fade-in {
       opacity: 1;
     }
+
+    #imageContainer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
+    }
+
+    .image-layer.active {
+      opacity: 1;
+    }
   </style>
 </head>
 <body class="bg-coal text-gray-400">
@@ -63,7 +81,10 @@
 <div id="fullscreen" class="flex items-center justify-center h-screen relative select-none">
   <div id="title" class="hidden absolute bottom-5 left-5 md:left-12 text-2xl"></div>
 
-  <img id="image" class="rounded-md max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%] object-contain" src="" alt="">
+  <div id="imageContainer" class="relative rounded-md max-w-[100%] 2xl:max-w-[100%] max-h-[100%] 2xl:max-h-[95%]">
+    <img id="image1" class="image-layer active rounded-md w-full h-full object-contain" src="" alt="">
+    <img id="image2" class="image-layer rounded-md w-full h-full object-contain" src="" alt="">
+  </div>
 
   <button id="prev" class="text-white fixed cursor-pointer z-50 p-0 bg-transparent border-0">
     <img src="icons/prev.svg" alt="Previous" class="w-12 h-12 md:w-20 md:h-20 opacity-[14%] transition duration-[0.75s] hover:opacity-[60%] active:opacity-40">
@@ -139,7 +160,7 @@ document.getElementById("contactToggle").onclick = function() {
 };
 
 // State
-let images = [], current = 0, loadingImage = null;
+let images = [], current = 0, loadingImage = null, currentImageElement = 1;
 
 // Image loading
 async function loadImages() {
@@ -159,7 +180,7 @@ async function loadImages() {
 
 // Position UI elements based on image bounds
 function positionElements() {
-  const img = document.getElementById('image');
+  const img = document.getElementById(`image${currentImageElement}`);
   const vw = document.documentElement.clientWidth;
   const vh = document.documentElement.clientHeight;
 
@@ -263,7 +284,6 @@ function updateDots() {
 function render() {
   const fs = document.getElementById('fullscreen');
   const g = document.getElementById('grid');
-  const img = document.getElementById('image');
   const isGridView = !g.classList.contains('hidden');
 
   if (!isGridView) {
@@ -280,8 +300,13 @@ function render() {
     document.getElementById('prev').style.display = current === 0 ? 'none' : 'block';
     document.getElementById('next').style.display = current === images.length - 1 ? 'none' : 'block';
 
-    // Set image source
-    img.src = images[current].url;
+    // Get current and next image elements
+    const currentImg = document.getElementById(`image${currentImageElement}`);
+    const nextImageElement = currentImageElement === 1 ? 2 : 1;
+    const nextImg = document.getElementById(`image${nextImageElement}`);
+
+    // Load new image in the inactive element
+    nextImg.src = images[current].url;
 
     // Preload adjacent images
     if (current > 0) new Image().src = images[current - 1].url;
@@ -289,7 +314,7 @@ function render() {
 
     // Position elements after image loads
     const reposition = () => requestAnimationFrame(positionElements);
-    img.onload = () => {
+    nextImg.onload = () => {
       if (loadingImage === loadingIndex) {
         const loadTime = Date.now() - loadStartTime;
         const indicator = document.querySelector('.loading-pulse');
@@ -306,12 +331,18 @@ function render() {
           }, { once: true });
         }
       }
+
+      // Cross-fade: fade out current, fade in next
+      currentImg.classList.remove('active');
+      nextImg.classList.add('active');
+      currentImageElement = nextImageElement;
+
       reposition();
     };
 
     // For cached images, trigger onload manually after a brief delay to allow UI to update
-    if (img.complete && img.naturalHeight !== 0) {
-      setTimeout(() => img.onload(), 0);
+    if (nextImg.complete && nextImg.naturalHeight !== 0) {
+      setTimeout(() => nextImg.onload(), 0);
     }
   } else {
     // Grid view
