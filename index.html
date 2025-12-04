@@ -93,7 +93,7 @@
 <div id="welcomePopup"
      class="backdrop-blur-md fixed inset-0 bg-coal/50 filter saturate-10 flex items-center justify-center z-50 hidden overflow-y-auto p-5 md:p-12">
   <button id="closePopup" class="text-4xl sm:text-6xl fixed top-3 right-5 px-2 py-0 text-gray-300 bg-transparent rounded-full z-10 scale-150 opacity-50 transition duration-[0.75s] hover:opacity-70">×</button>
-  <div id="albumsContainer" class="grid gap-4 md:gap-8 grid-cols-2 lg:grid-cols-3 w-full max-w-7xl my-auto"></div>
+  <div id="albumsContainer" class="grid gap-4 md:gap-8 grid-cols-1 w-full max-w-4xl my-auto"></div>
 </div>
 
 <script>
@@ -193,17 +193,25 @@ function renderAlbums() {
     const previewCount = Math.min(albumImages.length, 4);
     const gridClass = previewCount === 1 ? 'grid-cols-1' : 'grid-cols-2';
 
-    const previewGrid = albumImages.slice(0, 4).map(filename =>
-      `<div class="aspect-square overflow-hidden">
-         <img src="images/${filename}" alt="${filename}" class="w-full h-full object-cover">
-       </div>`
-    ).join('');
+    let previewGrid;
+    if (albumImages.length === 0) {
+      // Empty album: show black background
+      previewGrid = '<div class="bg-black rounded-lg" style="aspect-ratio: 1;"></div>';
+    } else {
+      previewGrid = `<div class="grid ${gridClass} gap-0 rounded-lg overflow-hidden">
+        ${albumImages.slice(0, 4).map(filename =>
+          `<div class="aspect-square overflow-hidden">
+             <img src="images/${filename}" alt="${filename}" class="w-full h-full object-cover">
+           </div>`
+        ).join('')}
+      </div>`;
+    }
 
     return `
-      <div class="cursor-pointer select-none" onclick="selectAlbum('${albumName}')">
-        <p class="text-gray-400 italic text-sm mb-2">${albumName}</p>
-        <div class="grid ${gridClass} gap-0 rounded-lg overflow-hidden">
-          ${previewGrid}
+      <div class="grid grid-cols-2 gap-4 cursor-pointer select-none" onclick="selectAlbum('${albumName}')">
+        <div>${previewGrid}</div>
+        <div class="flex items-center justify-center">
+          <p class="text-gray-400 italic text-sm">${albumName}</p>
         </div>
       </div>
     `;
