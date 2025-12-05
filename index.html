@@ -188,7 +188,7 @@ function renderAlbums() {
   const container = document.getElementById('albumsContainer');
   const albumNames = Object.keys(albums);
 
-  container.innerHTML = albumNames.map(albumName => {
+  container.innerHTML = albumNames.map((albumName, index) => {
     const albumImages = albums[albumName];
     const previewCount = Math.min(albumImages.length, 4);
     const gridClass = previewCount === 1 ? 'grid-cols-1' : 'grid-cols-2';
@@ -208,7 +208,7 @@ function renderAlbums() {
     }
 
     return `
-      <div class="grid grid-cols-2 gap-4 cursor-pointer select-none" onclick="selectAlbum('${albumName}')">
+      <div class="grid grid-cols-2 gap-4 cursor-pointer select-none album-item" data-album="${albumName}">
         <div>${previewGrid}</div>
         <div class="flex items-center justify-center">
           <p class="text-gray-400 italic text-sm">${albumName}</p>
@@ -216,6 +216,15 @@ function renderAlbums() {
       </div>
     `;
   }).join('');
+
+  // Add click handlers via event delegation
+  container.onclick = (e) => {
+    const albumItem = e.target.closest('.album-item');
+    if (albumItem) {
+      const albumName = albumItem.dataset.album;
+      selectAlbum(albumName);
+    }
+  };
 }
 
 // Position UI elements based on image bounds
