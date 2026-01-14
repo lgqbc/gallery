@@ -365,7 +365,7 @@ function render() {
         const indicator = document.querySelector('.loading-pulse');
 
         // If image loaded quickly (within animation delay period), clear immediately
-        if (loadTime < 400 || !indicator) {
+        if (loadTime < 200 || !indicator) {
           loadingImage = null;
           updateDots();
         } else {
